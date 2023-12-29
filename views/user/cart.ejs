@@ -1,0 +1,257 @@
+<%- include('../partials/user/userHeader.ejs') %>
+
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Cart</h1>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<div class="untree_co-section before-footer-section">
+    <div class="container">
+        <div class="row mb-5">
+            <form class="col-md-12" method="post">
+                <div class="site-blocks-table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="product-thumbnail">Image</th>
+                                <th class="product-name">Product</th>
+                                <th class="product-price">Price</th>
+                                <th class="product-quantity">Quantity</th>
+                                <th class="product-total">Total</th>
+                                <th class="product-remove">Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           <% if (!cart || cart.items.length === 0){  %>
+
+                            <h1>Cart is Empty</h1>
+
+                            <% } else { %>
+                             
+                
+                            <%  var total = 0;
+                                cart.items.forEach(item => { %>
+                                   
+                                <tr>
+                                    <td class="product-thumbnail">
+                                        <img src="uploads/<%= item.product.images[0].url %>" alt="Image" class="img-fluid">
+                                    </td>
+                                    <td class="product-name">
+                                        <h2 class="h5 text-black"><%= item.product.name %></h2>
+                                    </td>
+                                    <td>$ &nbsp;<%= item.product.price %></td>
+                            
+                                    <td>
+                                        <div class="input-group mb-3 d-flex align-items-center quantity-container"
+                                            style="max-width: 120px;">
+                                            <div class="input-group-prepend">
+                                                <button class="btn btn-outline-black decrease" type="button"
+                                                >-</button>
+    
+                                              
+    
+                                            </div>
+                                            <input type="text" data-product-id="<%= item.product._id %>" class="form-control text-center quantity-amount"
+                                                value="<%= item.quantity %>" max="10" disabled placeholder=""
+                                                aria-label="Example text with button addon"  aria-describedby="button-addon1" >
+                                            <div class="input-group-append" id="<%= item.product._id %>">
+                                                <button 
+                                                class="btn btn-outline-black increase" type="button" id="inc"
+                                                  >+</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span id="subtotalId_<%= item.product._id %>">₹&nbsp;<%= item.product.price * item.quantity %></span></td>
+    
+                                    <td><a href="/user/cart-remove/<%= item.product._id %>" class="btn btn-black btn-sm">Remove</a></td>
+
+                                </tr>
+                                
+                            </a>
+                            
+                                <%
+                            
+                                total += item.product.price * item.quantity
+
+                            }) %>
+
+                                <% } %>
+
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row mb-5">
+                   
+                    
+                    <div class="col-md-6">
+                    
+                            <a href="/user"> <button class="btn btn-outline-black btn-sm btn-block">Continue Shopping</button></a>
+                              
+                    </div>
+                </div>
+
+           
+            </div>
+             <div class="col-md-6 pl-5">
+                <div class="row justify-content-end">
+                    <div class="col-md-7">
+                        <div class="row">
+                            <div class="col-md-12 text-right border-bottom mb-5">
+                                <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
+                            </div>
+                        </div>
+
+
+                        <!-- <div class="row mb-5">
+                            <div class="col-md-6">
+                                <span class="text-black">Subtotal</span>
+                            </div>
+                            <div class="col-md-6 text-right" style="display: flex;">
+                                <strong>₹</strong> &nbsp;<strong class="text-black"></strong>
+                            </div>
+                        </div> -->
+
+                        <div class="row mb-5">
+                            <div class="col-md-6">
+                                <span class="text-black">Total</span>
+                            </div>
+                            <div class="col-md-6 text-right" style="display: flex;">
+                                <strong>₹</strong> &nbsp;<strong class="text-black" id="totalprice" name="totaAmount"><%= total %></strong>
+                            </div>
+                        </div>
+
+                          <!-- <input type=""  id="-input" name="total-"> -->
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a href="/user/checkout">
+                                    <% if (!cart || cart.items.length === 0){  %>
+                            <% } else { %>
+                                    <button class="btn btn-black btn-lg py-3 btn-block"
+                                        onclick="window.location='checkout.html'">Proceed To Checkout</button>
+                                        <% } %>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    function updateCart(productId, quantity, totalPrice) {
+  console.log('Sending request to update cart. ProductId:', productId, 'Quantity:', quantity);
+
+  fetch('/user/updateQuantity', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      productId: productId,
+      quantity: quantity,
+      totalPrice: totalPrice
+    })
+  })
+  .then(response => response.json())
+  .then(response => {
+    let totalPrice = 0;
+    console.log(response);
+
+    if (response.subtotal && Array.isArray(response.subtotal)) {
+      response.subtotal.forEach(subtotalData => {
+        const productId = subtotalData.productId;
+        const subtotal = subtotalData.subtotal;
+
+        const subtotalElement = document.getElementById(`subtotalId_${productId}`);
+        if (subtotalElement) {
+          subtotalElement.innerHTML = `$ ${subtotal}`;
+        }
+        totalPrice = response.subtotal.reduce((acc, item) => acc + item.subtotal, 0);
+      });
+
+      document.getElementById("totalprice").innerHTML = totalPrice;
+    } else {
+      console.error('Invalid response format: response.subtotals is not an array.');
+    }
+
+    if (response.quantity >= response.stock) {
+      document.getElementById(response.prodId).innerHTML = '<span style="color: red;"  > stock limit reached </span>';
+    }
+
+    console.log(response.prodId);
+  })
+  .catch(error => {
+    console.error('Error updating cart: ', error);
+  });
+}
+
+    $(document).ready(function () {
+        $('.increase').click(function () {
+            var inputElement = $(this).closest('.quantity-container').find('.quantity-amount');
+            var productId = inputElement.data('product-id');
+            var currentQuantity = parseInt(inputElement.val());
+            var newQuantity = currentQuantity + 1;
+            var totalPriceElement = document.getElementById('totalprice');
+
+            var totalPrice = totalPriceElement.textContent
+            
+
+
+            console.log('Increase button clicked. ProductId:', productId, 'New Quantity:', newQuantity, totalPrice);
+            inputElement.val(newQuantity);
+            updateCart(productId, newQuantity,totalPrice);
+        });
+
+
+
+
+
+        $('.decrease').click(function () {
+            var inputElement = $(this).closest('.quantity-container').find('.quantity-amount');
+            var productId = inputElement.data('product-id');
+            var currentQuantity = parseInt(inputElement.val());
+            if (currentQuantity > 1) {
+                var newQuantity = currentQuantity - 1;
+                var totalPriceElement = document.getElementById('totalprice');
+
+var totalPrice = totalPriceElement.textContent
+
+        
+                console.log('Decrease button clicked. ProductId:', productId, 'New Quantity:', newQuantity, totalPrice);
+                inputElement.val(newQuantity);
+                updateCart(productId, newQuantity,totalPrice);
+            }
+        });
+    });
+
+
+
+
+
+  
+</script>
+
+<%- include('../partials/user/userFooter.ejs') %>

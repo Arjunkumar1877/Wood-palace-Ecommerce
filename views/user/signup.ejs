@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #5de348, #044508);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .signup-container {
+      max-width: 400px;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+
+    h1 {
+      color: #0083b0;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .input-container {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    label {
+      font-size: 18px;
+      color: #0083b0;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background: #e6e6e6;
+      margin-top: 5px;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      background: #0083b0;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      background: #005f7d;
+    }
+
+    p {
+      font-size: 16px;
+      margin-top: 20px;
+    }
+
+    a {
+      color: #0083b0;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+    I{
+      color: green;
+    }
+    span{
+      color: red;
+    }
+  </style>
+</head>
+
+<body style="display: flex;">
+
+  <div class="signup-container">
+    <h1>Create an Account</h1>
+    <form action="/user/signupOtp" method="POST">
+      <div class="input-container">
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" name="name" onkeyup="validateName()" required>
+        <span id="name-error"></span>
+      </div>
+      <div class="input-container">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" onkeyup="validateEmail()" required>
+        <span id="email-error"></span>
+      </div>
+      <div class="input-container">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <div class="input-container">
+        <label for="password1">Confirm Password:</label>
+        <input type="password" id="password1" name="password1" onkeyup="validatePassword()" required>
+        <span id="password-error"></span>
+      </div>
+      <div class="input-container">
+        <label for="phone">Phone Number:</label>
+        <input type="text" id="phone" value="+91" name="phone" onkeyup="validatePhone()" required>
+        <span id="phone-error"></span>
+      </div>
+      <button type="submit">Sign Up</button>
+    </form>
+    <p>Already have an account? <a href="/user/login">Log in here</a></p>
+  </div>
+
+
+</body>
+
+</html>
+
+<script>
+  var nameError = document.getElementById("name-error");
+  var emailError = document.getElementById("email-error");
+  var passwordError = document.getElementById("password-error");
+  var passwordError = document.getElementById("password-error");
+  var phoneError = document.getElementById("phone-error");
+
+  function validateName() {
+    var name = document.getElementById("name").value;
+
+    if (name.length == 0) {
+      nameError.innerHTML = "Name is required";
+      return false;
+    }
+
+    if (!name.match(/^[A-Za-z\s'-]+$/)) {
+      nameError.innerHTML = "Write full name";
+    }
+
+    nameError.innerHTML = '<i  class="fa-solid fa-circle-check"></i>';
+    return true;
+  }
+
+  function validateemail() {
+    var email = document.getElementById("email").value;
+
+    if (email.length === 0) {
+      emailError.innerHTML = "Email is required";
+      return false;
+    }
+
+    if (
+      !email.match(
+        /^(?:\+\d{1,3}\-)?[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+      )
+    ) {
+      emailError.innerHTML = "Email Invalid";
+      return false;
+    }
+
+    emailError.innerHTML = '<i  class="fa-solid fa-circle-check"></i>';
+    return true;
+  }
+
+  function validatePassword() {
+    var password = document.getElementById("password").value;
+    var password1 = document.getElementById("password1").value;
+
+    if (password !== password1) {
+      passwordError.innerHTML = "Passwords not match";
+      return false;
+    }
+
+    passwordError.innerHTML = '<i  class="fa-solid fa-circle-check"></i>';
+    return true;
+  }
+
+  function validatePhone() {
+    var phone = document.getElementById("phone").value;
+
+    if (phone.length == 0) {
+      phoneError.innerHTML = "Phone no is required";
+      return false;
+    }
+    if (!phone.match(/^(\+\d{1,9})?\d{10}$/)) {
+      phoneError.innerHTML = "Enter only digits";
+      return false;
+    }
+    phoneError.innerHTML = '<i  class="fa-solid fa-circle-check"></i>';
+    return true;
+  }
+</script>

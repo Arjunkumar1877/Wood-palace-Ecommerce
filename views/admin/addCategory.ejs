@@ -1,0 +1,144 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Category Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="Your-Integrity-Here" crossorigin="anonymous">
+  <style>
+    body {
+      background-color: #f2f2f2;
+      
+    }
+    .category-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding-top:  150px;
+    }
+    .category-content {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    .category-form {
+      width: 100%;
+      max-width: 400px;
+      margin-top: 20px;
+    }
+    .form-label {
+      font-weight: bold;
+    }
+    .btn-primary {
+      background-color: #007BFF;
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+    .btn-danger {
+      background-color: #DC3545;
+      border: none;
+    }
+    .btn-danger:hover {
+      background-color: #a71d2a;
+    }
+    .btn-success {
+      background-color: #28A745;
+      border: none;
+    }
+    .btn-success:hover {
+      background-color: #1d943f;
+    }
+  </style>
+</head>
+<body>
+  <%- include('../partials/admin/adminHeader.ejs') %>
+
+
+
+  <p style="padding-top: 100px;margin-bottom: -150px;font-size: larger; text-align: center; color: rgb(0, 0, 0);"><%= message %></p>
+  <div class="category-container">
+    <div class="category-content">
+      <h1 class="text-center">Category Management</h1>
+      <form class="category-form" action="/admin/add-category" method="post" onsubmit="return validateForm()">
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">No</th>
+              <th scope="col">Name</th>
+              <th scope="col">Status</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% category.forEach((cat, index) => { %>
+              <tr>
+                <td><%= index + 1 %></td>
+                <td><%= cat.categoryName %></td>
+                <td>
+                  <% if (cat.active) { %>
+                    <span class="badge badge-success">Active</span>
+                  <% } else { %>
+                    <span class="badge badge-danger">Inactive</span>
+                  <% } %>
+                </td>
+                <td>
+        
+                  
+    
+                  <% if (cat.active) { %>
+                    <a href="/admin/deactivate-category/<%= cat._id %>">
+                      <button type="button" class="btn btn-danger">Deactivate</button>
+                    </a>
+                  <% } else { %>
+                    <a href="/admin/activate-category/<%= cat._id %>">
+                      <button type="button" class="btn btn-success">Activate</button>
+                    </a>
+                  <% } %>
+
+                  
+                  
+                    
+                  <a href="/admin/edit-category-page/<%= cat._id %>">
+                    <button type="button" class="btn btn-success">Edit</button>
+                  </a>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+
+        <h2 class="text-center">Add Category</h2>
+        <div class="mb-3">
+          <input type="text" class="form-control" id="categoryName" name="categoryName" placeholder="Enter new Category" required>
+          <div id="categoryNameError" class="text-danger"></div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Add</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function validateForm() {
+      const categoryName = document.getElementById("categoryName").value;
+      const categoryNameError = document.getElementById("categoryNameError");
+
+      if (categoryName.trim() === "") {
+        categoryNameError.textContent = "Category Name is required.";
+        return false;
+      } else {
+        categoryNameError.textContent = "";
+        return true;
+      }
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="Your-Integrity-Here" crossorigin="anonymous"></script>
+</body>
+</html>

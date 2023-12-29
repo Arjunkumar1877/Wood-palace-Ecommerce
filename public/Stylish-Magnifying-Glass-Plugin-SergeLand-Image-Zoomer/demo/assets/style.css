@@ -1,0 +1,31 @@
+* {
+    box-sizing: border-box;
+}
+
+.wrapper {
+    min-height: 100vh;
+}
+
+.block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    padding: 50px;
+    flex-direction: column;
+
+    background-color: aliceblue;
+}
+
+.block__pic {
+    width: 300px;
+}
+
+.block__title {
+    margin-bottom: 30px;
+
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 25px;
+}

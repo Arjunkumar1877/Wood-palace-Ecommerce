@@ -1,0 +1,144 @@
+
+
+
+
+<%- include('../partials/user/userHeader.ejs') %>
+
+
+
+<br>
+<br>
+
+
+
+
+
+
+
+  <div class="container" style="background-color:#fff;border-radius:8px;box-shadow:0 0 10px rgba(0,0,0,0.1);display:flex; padding-top: 20px;">
+    <div class="image-container" style="width:50%;display:flex;flex-direction:column;margin-top:40px;">
+      <div class="big-image" style="height:70%;display:flex;justify-content:center;align-items:center;">
+        <img src="uploads/<%= product.images[0].url %>" alt="" id="zoom" style="max-width:100%;max-height:100%;object-fit:contain;">
+      </div>
+      <div class="small-images" style="height:30%;display:flex;justify-content:space-around;align-items:center;">
+<% for( let i = 0; i  < product.images.length; i++ ) { %>
+  <img src="uploads/<%= product.images[i].url %>" alt="" style="max-width:70px;max-height:70px;cursor:pointer;transition:transform 0.2s;">
+
+<% } %>        
+        <img src="./cabinet5.1.avif" alt="" style="max-width:70px;max-height:70px;cursor:pointer;transition:transform 0.2s;">
+      </div>
+    </div>
+    <div class="content" style="width:50%;padding:20px;margin-left:40px;margin-top:30px;">
+      <h1 style="font-size:2.5rem;color:#333;margin-top:40px;"><%= product.name %></h1>
+      <p style="font-size:1.6rem;color:#666;padding:10px 0;"><%= product.description.substring(0, 250) %></p>
+      <div class="stars" style="font-size:2rem;color:gold;">
+        <i class="fa-solid fa-star"></i>
+        <i class="fa-solid fa-star"></i>
+        <i class="fa-solid fa-star"></i>
+        <i class="fa-solid fa-star"></i>
+        <i class="fa-solid fa-star"></i>
+      </div>
+      <% var value= product.price + 1000 %>
+      <div class="price" style="font-size:2.5rem;color:#e44d26;margin-top:20px;">₹ <%= product.price %> <span style="font-size:1.8rem;color:#999;text-decoration:line-through;">₹ <%= value %></span></div>
+      <div class="discount">
+        <p style="font-size:1.6rem;">Save 1000 today!</p>
+      </div>
+      <div class="description">
+        <h3 style="font-size:2rem;">Product Description</h3>
+        <p style="font-size:1.6rem;"><%= product.description.substring(0, 30) %></p>
+      </div>
+      <div class="specifications">
+        <h3 style="font-size:2rem;">Specifications</h3>
+        <ul>
+          <li style="font-size:1.6rem;">Stock:  <%= product.stock %></li>
+          <li style="font-size:1.6rem;">Color: Elegant Black</li>
+          <li style="font-size:1.6rem;">Size: Various sizes available</li>
+          <li style="font-size:1.6rem;">Weight: Lightweight</li>
+        </ul>
+      </div>
+      <div id="message-alert" style="color: red;"></div>
+     <% if (user) { %>
+      <a href="/user/add-wishlist/<%= product._id %>">
+        <button type="button" class="btn btn-success add-to-cart-btn" onclick="wishlistAdd()" style="height: 4rem; width: 50%; font-size: 1.6rem; background-color: #af4c6d; color: #fff; border: none; border-radius: 4px; cursor: pointer; transition: background-color 0.2s; margin-top: 20px; position: relative;">
+          Add to wishlist
+          <i class="fa-regular fa-heart" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: aliceblue; font-size: x-large;"></i>
+        </button>
+      </a>
+     <% }else{ %>
+      <a href="/user/add-wishlist/<%= product._id %>">
+        <button type="button" class="btn btn-success add-to-cart-btn" style="height: 4rem; width: 50%; font-size: 1.6rem; background-color: #af4c6d; color: #fff; border: none; border-radius: 4px; cursor: pointer; transition: background-color 0.2s; margin-top: 20px; position: relative;">
+          Add to wishlist
+          <i class="fa-regular fa-heart" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: aliceblue; font-size: x-large;"></i>
+        </button>
+      </a>
+      <% } %>
+      
+</button>
+      <div class="buy-buttons">
+      <% if (product.stock > 0) { %>
+        <% if (user) { %>
+          <a href="/user/addToCart/<%= product._id %>" onclick="productAdd()"><button type="button" class="add-to-cart-btn"   style="height:4rem;width:100%;font-size:1.6rem;background-color:#4caf50;color:#fff;border:none;border-radius:4px;cursor:pointer;transition:background-color 0.2s;margin-top:20px;">Add to Cart <i class="fa-solid fa-cart-shopping"></i></button></a>
+        <% }else{ %>
+          <a href="/user/addToCart/<%= product._id %>"><button type="button" class="add-to-cart-btn"   style="height:4rem;width:100%;font-size:1.6rem;background-color:#4caf50;color:#fff;border:none;border-radius:4px;cursor:pointer;transition:background-color 0.2s;margin-top:20px;">Add to Cart <i class="fa-solid fa-cart-shopping"></i></button></a>
+          <% } %>
+        <a href="/user/buy-now/<%= product._id %>"><button class="buy-now-btn" style="height:4rem;width:100%;font-size:1.6rem;background-color:#4caf50;color:#fff;border:none;border-radius:4px;cursor:pointer;transition:background-color 0.2s;margin-top:20px;">Buy Now <i class="fa-solid fa-shopping-bag"></i></button></a>
+      <% }else{ %>
+        <h1>out of stock</h1>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+
+
+  <%- include('../partials/user/userFooter.ejs') %>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="Stylish-Magnifying-Glass-Plugin-SergeLand-Image-Zoomer/zoomsl.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    
+  </script>
+  <script>
+    $(document).ready(function(){
+      $('.small-images img').click(function(){
+        var image = $(this).attr('src');
+        $('.big-image img').attr('src', image);
+      });
+      $('#zoom').imagezoomsl({
+        zoomrange: [4,4]
+      });
+    });
+
+
+
+
+
+    function productAdd(e){
+      Swal.fire({
+  position: "top-end",
+  icon: "success",
+  title: "Product Added to cart",
+  showConfirmButton: false,
+  timer: 1500
+});
+    }
+
+    function wishlistAdd(e){
+      Swal.fire({
+  position: "top-end",
+  icon: "success",
+  title: "Product added to wishlist !",
+  showConfirmButton: false,
+  timer: 1500
+});
+    }
+
+
+
+  </script>
+
+
+
+

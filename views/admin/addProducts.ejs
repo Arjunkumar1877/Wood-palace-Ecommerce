@@ -1,0 +1,219 @@
+<%- include('../partials/admin/adminHeader.ejs') %>
+
+<style>
+  /* Add CSS for the body or a container element for better styling */
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #05582c, #764ba2);
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-addProduct {
+    text-align: center;
+  }
+
+  .form-addProduct h1 {
+    margin-bottom: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    font-weight: bold;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  .error {
+    color: red;
+  }
+
+  .success {
+    color: green;
+  }
+
+  .btn-primary {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+</style>
+
+<div class="container">
+  <form class="form-addProduct" action="/admin/add-product" enctype="multipart/form-data" method="post" id="productForm">
+    <h1>Add Products</h1>
+
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" name="name" required id="nameField" placeholder="Name">
+      <span class="name error"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="category">Choose the category</label>
+      <select class="form-control" name="category" required id="categoryField">
+        <option value="">Choose the category</option>
+        <% category.forEach((cat, index) => { %>
+        <option value="<%= cat._id %>"><%= cat.categoryName %></option>
+        <% }) %>
+      </select>
+      <span class="category error"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="price">Price</label>
+      <input type="number" name="price" required id="priceField" placeholder="Price">
+      <span class="price error"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <input type="text" name="description" required id="descriptionField" placeholder="Description">
+      <span class="description error"></span>
+    </div>
+
+    
+    <label for="productImages">Product Images (up to 5):</label>
+    <input type="file" id="productImages" name="images" accept="image/*" multiple required>
+    
+
+    <div class="form-group">
+      <label for="stock">Stock</label>
+      <input type="number" name="stock" required id="stockField" min="1" placeholder="Stock">
+      <span class="stock error"></span>
+    </div>
+    <div id="liveAlertPlaceholder" style="width: 100%;"></div>
+    <button type="submit" class="btn btn-primary" id="liveAlertBtn">Submit</button>
+    <h1><%- data %></h1>
+  </form>
+</div>
+
+<script>
+const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+
+const appendAlert = (message, type) => {
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = [
+    `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+    `   <div>${message}</div>`,
+    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+    '</div>'
+  ].join('');
+
+  alertPlaceholder.innerHTML = ''; 
+  alertPlaceholder.append(wrapper);
+};
+
+const form = document.getElementById('productForm');
+
+form.addEventListener('change', function (event) {
+  let valid = true;
+
+  // Validation for the name field
+  const nameField = document.getElementById('nameField');
+  const nameError = document.querySelector('.name');
+  if (nameField.value.trim() === '') {
+    nameError.textContent = 'Name is required';
+    valid = false;
+  } else {
+    nameError.innerHTML = '<i  style="color: green;" class="fa-solid fa-circle-check"></i>';
+  }
+
+  const categoryField = document.getElementById('categoryField');
+  const categoryError = document.querySelector('.category');
+  if (categoryField.value === '') {
+    categoryError.textContent = 'Category is required';
+    valid = false;
+  } else {
+    categoryError.innerHTML = '<i  style="color: green;" class="fa-solid fa-circle-check"></i>';
+  }
+
+  const priceField = document.getElementById('priceField');
+  const priceError = document.querySelector('.price');
+  if (isNaN(priceField.value) || priceField.value <= 0) {
+    priceError.textContent = 'Price must be a positive number';
+    valid = false;
+  } else {
+    priceError.innerHTML = '<i  style="color: green;" class="fa-solid fa-circle-check"></i>';
+  }
+
+  const descriptionField = document.getElementById('descriptionField');
+  const descriptionError = document.querySelector('.description');
+  if (descriptionField.value.trim() === '') {
+    descriptionError.textContent = 'Description is required';
+    valid = false;
+  } else {
+    descriptionError.innerHTML = '<i  style="color: green;" class="fa-solid fa-circle-check"></i>';
+  }
+
+  const file1 = document.getElementById('file1');
+  const file1Error = document.querySelector('.file1');
+  if (file1.files.length === 0) {
+    file1Error.textContent = 'Image1 is required';
+    valid = false;
+  } else {
+    file1Error.innerHTML = '<i  style="color: green;" class="fa-solid fa-circle-check"></i>';
+  }
+
+  const file2 = document.getElementById('file2');
+  const file2Error = document.querySelector('.file2');
+  if (file2.files.length === 0) {
+    file2Error.textContent = 'Image2 is required';
+    valid = false;
+  } else {
+    file2Error.innerHTML = '<i  style="color: green;" class="fa-solid fa-circle-check"></i>';
+  }
+
+  // Validation for the stock field
+  const stockField = document.getElementById('stockField');
+  const stockError = document.querySelector('.stock');
+  if (isNaN(stockField.value) || stockField.value < 1) {
+    stockError.textContent = 'Stock must be a non-negative number';
+    valid = false;
+  } else {
+    stockError.innerHTML = '<i  style="color: green;" class="fa-solid fa-circle-check"></i>';
+  }
+
+  if (!valid) {
+    event.preventDefault(); 
+    appendAlert('Please fill in all required fields correctly.', 'danger');
+  }
+});
+
+
+form.addEventListener('submit', function () {
+
+  isFormSubmitted = true;
+  
+  appendAlert('A new product has been added to the Product list.', 'success');
+});
+</script>
+

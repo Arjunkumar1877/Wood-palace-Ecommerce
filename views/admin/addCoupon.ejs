@@ -1,0 +1,107 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Add Coupon</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .coupon-form {
+      width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 0 5px #ccc;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input[type="text"], input[type="date"], input[type="number"] {
+      width: 95%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Add Coupon</h1>
+  <div class="coupon-form">
+    <form action="/admin/add-coupon" method="post">
+      <label for="couponcode">Coupon Code:</label>
+      <input type="text" id="code" name="code">
+      <button id="coupon-generate" class="btn-success">Generate Coupon</button>
+
+      <label for="expiryDate">Expiry Date:</label>
+      <input type="date" id="expiryDate" name="expiryDate">
+
+ <label for="discountPercentage">Discount Percentage:</label>
+      <select name="discountPercentage" id="discountPercentage">
+        <option value="">Select Discount</option>
+        <option value="10">10%</option>
+        <option value="20">20%</option>
+        <option value="30">30%</option>
+        <option value="40">40%</option>
+        <option value="50">50%</option>
+        <option value="60">60%</option>
+      </select> 
+
+      <button type="submit">Add Coupon</button>
+    </form>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+        $('#coupon-generate').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/admin/generate-coupon',
+                method: 'POST',
+                // Send an empty object or adjust this part based on what your '/admin/generate-coupon' endpoint expects
+                data: {},
+                success: function (response) {
+                    console.log('Coupon generated successfully:', response);
+                    document.getElementById("code").value = response.coupon;
+                    console.log("🔥🔥🔥🔥🔥🔥");
+                    
+                },
+                error: function (error) {
+                    console.error('Error generating coupon: ', error);
+                }
+            });
+        });
+    });
+  </script>
+</body>
+</html>
+
+
+</body>
+</html>

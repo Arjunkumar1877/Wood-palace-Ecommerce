@@ -1,0 +1,258 @@
+
+<%- include('../partials/user/userHeader.ejs') %>
+
+
+<body>
+    
+    <form action="/user/add-address" style="display: flex; justify-content: center;"  onsubmit="return addAddress(this)" method="post">
+
+        <div class="col-md-6 mb-5 mb-md-0">
+           
+            <div class="p-3 p-lg-5 border bg-white" style="margin-top: 70px;">   
+                <h1 style="text-align: center; margin-bottom: 10px; text-decoration: underline;">Enter your Details</h1>
+              <div class="form-group row">
+                <div class="col-md-6">
+                  <label for="c_fname" class="text-black">First Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="fname" onkeyup="validateFirstname()" name="firstName">
+                  <span class="firstname-error" style="color: red;"></span>
+                </div>
+                <div class="col-md-6">
+                  <label for="c_lname" class="text-black">Last Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="lname"  onkeyup="validateLastname()" name="lastName">
+                  <span class="lastname-error" style="color: red;"></span>
+
+                </div>
+              </div>
+        
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <label for="c_companyname" class="text-black">Landmark <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" onkeyup="validateLandmark()" id="landmark" name="landmark">
+                  <span class="landmark-error" style="color: red;"></span>
+                </div>
+              </div>
+        
+              <div class="form-group row">
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="exampleFormControlTextarea1" class="form-label">Address</label>
+                        <textarea class="form-control" name="addressDetail" onkeyup="validateAddress()"  id="address" rows="3"></textarea>
+                  <span class="address-error" style="color: red;"></span>
+
+                      </div>
+                </div>
+              </div>
+        
+            
+              <div class="form-group row">
+                <div class="col-md-6">
+                  <label for="c_state_country" class="text-black">State  <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="stateIn" onkeyup="validateState()" name="state">
+                  <span class="state-error" style="color: red;"></span>
+
+                </div>
+                <div class="col-md-6">
+                  <label for="c_postal_zip" class="text-black">Posta / Zip <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="zip" onkeyup="validateZip()" name="zip">
+                  <span class="zip-error" style="color: red;"></span>
+
+                </div>
+              </div>
+        
+              <div class="form-group row mb-5">
+                <div class="col-md-6">
+                  <label for="c_phone" class="text-black">Phone <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="phone" onkeyup="validatePhone()" name="phone" placeholder="Phone Number">
+                  <span class="phone-error" style="color: red;"></span>
+
+                </div>
+              </div>
+         
+              <div id="liveAlertPlaceholder"></div>
+              <button type="submit" class="btn btn-success" id="liveAlertBtn">Submit</button>
+    
+                  </div>
+    
+                 
+              </div>
+        
+    
+    
+       </form>
+
+       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+       <script src="sweetalert2.min.js"></script>
+       <link rel="stylesheet" href="sweetalert2.min.css">
+
+       <script>
+
+
+function addAddress(form){
+  Swal.fire({
+  title: 'New Address Added!',
+  text: '',
+  icon: 'success',
+  confirmButtonText: ''
+})
+}
+
+
+
+
+
+      const firstNameErr = document.querySelector('.firstname-error');
+      const lastNameErr = document.querySelector('.lastname-error');
+      const landmarkErr = document.querySelector('.landmark-error');
+      const addressErr = document.querySelector('.address-error');
+      const stateErr = document.querySelector('.state-error');
+      const zipErr = document.querySelector(".zip-error");
+      const phoneErr = document.querySelector('.phone-error');
+
+      function validateFirstname(){
+       const fname = document.getElementById("fname").value;
+
+       if(fname.trim() === ''){
+        firstNameErr.innerHTML = 'Firstname required';
+        return false;
+       }
+
+       if(!fname.match(/^[A-Za-z\s'-]+$/)){
+        firstNameErr.innerHTML = 'Invaild Entry'
+        return false;
+       }
+
+       firstNameErr.innerHTML = '<i  style="color: green;" class="fa-solid fa-circle-check"></i>';
+       return true;
+      }
+
+      function validateLastname(){
+        const lname = document.getElementById('lname').value;
+
+        if(lname.trim() === ''){
+          lastNameErr.innerHTML = 'Lastname required';
+          return false;
+        }
+
+        if(!lname.match(/^[A-Za-z\s'-]+$/)){
+          lastNameErr.innerHTML = 'Inavild Entry';
+          return false;
+        }
+ 
+       lastNameErr.innerHTML = '<i  style="color: green;" class="fa-solid fa-circle-check"></i>';
+       return true;
+      }
+
+      function validateLandmark(){
+        const lmark = document.getElementById('landmark').value;
+
+        if(lmark.trim() === ''){
+          landmarkErr.innerHTML = 'Landmark required'; 
+          return false;
+        }
+        if(!lmark.match(/^[A-Za-z\s'-]+$/)){
+          landmarkErr.innerHTML = 'Invalid Entry';
+          return false;
+        }
+      
+        landmarkErr.innerHTML = '<i  style="color: green;" class="fa-solid fa-circle-check"></i>';
+       return true;
+
+      }
+  
+      function validateAddress(){
+       const address = document.getElementById('address').value;
+
+       if(address.trim() === ''){
+        addressErr.innerHTML = 'Address required';
+        return false;
+       }
+       addressErr.innerHTML =  '<i  style="color: green;" class="fa-solid fa-circle-check"></i>';
+       return true;
+      }
+
+      function validateState(){
+        const state = document.getElementById('stateIn').value;
+
+        if(state.trim() === ''){
+           stateErr.innerHTML = 'State required'
+           return false;
+        }
+
+        if(!state.match(/^[A-Za-z\s'-]+$/)){
+          stateErr.innerHTML = 'Invalid Entry';
+          return false;
+        }
+
+        stateErr.innerHTML = '<i  style="color: green;" class="fa-solid fa-circle-check"></i>';
+        return true;
+      }
+
+      function validateZip(){
+        const zip = document.getElementById('zip').value;
+
+        if(zip < 1){
+          zipErr.innerHTML = 'Zip code required';
+          return false;
+        }
+
+        if(zip.match(/^[A-Za-z\s'-]+$/)){
+          zipErr.innerHTML = 'Invalid Entry';
+          return false;
+        }
+
+        zipErr.innerHTML = '<i  style="color: green;" class="fa-solid fa-circle-check"></i>';
+        return true;
+      }
+
+      function validatePhone(){
+        const phone = document.getElementById('phone').value;
+
+        if(phone < 5){
+          phoneErr.innerHTML = 'Phone required';
+          return false;
+        }
+        if(phone.match(/^\d{10}$/)){
+          phoneErr.innerHTML = 'Invalid Entry';
+          return false;
+        }
+
+        phoneErr.innerHTML = '<i  style="color: green;" class="fa-solid fa-circle-check"></i>';
+        return true;
+      }
+
+
+
+
+
+      
+           const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+const appendAlert = (message, type) => {
+  const wrapper = document.createElement('div')
+  wrapper.innerHTML = [
+    `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+    `   <div>${message}</div>`,
+    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+    '</div>'
+  ].join('')
+
+  alertPlaceholder.append(wrapper)
+}
+
+const alertTrigger = document.getElementById('liveAlertBtn')
+if (alertTrigger) {
+  alertTrigger.addEventListener('click', () => {
+    appendAlert('New address details have been added!', 'success')
+  })
+}
+
+
+
+
+    </script>
+
+       
+
+
+</body>
+      

@@ -1,0 +1,126 @@
+
+
+<style>
+
+    .full-description.hidden {
+      display: none;
+    }
+    
+    .read-more {
+    margin-top: -71px;
+    text-decoration: none;
+    margin-left: 214px;
+    }
+    
+    .read-less.hidden {
+      display: none;
+      text-decoration: none;
+    
+    }
+    
+    
+    .read-less{
+      text-decoration: none;
+    
+    }
+
+    .short-description.hidden {
+        display: none;
+    }
+ 
+    .product-section h1{
+        font-weight: 900;
+    }
+    
+    </style>
+    
+
+<%- include('../partials/user/userHeader.ejs') %>
+
+
+
+
+
+    <div class="product-section">
+        <h1>  <%= product[0]?.category?.categoryName  %></h1>
+        <div class="container">
+            <div class="row">
+
+                <% product.forEach(item => { %>
+                  
+                <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+                    <a class="product-item" href="/user/productSinglePage?id=<%= item._id %>">
+                        <img src="uploads/<%= item.images[0].url %>" alt="Image" class="img-fluid">
+                        <h3 class="product-title"><%= item.name %></h3>
+                        <strong class="product-price"><span>Price: &nbsp;₹<%= item.price %></span></strong>
+                          <% if (item.stock < 1) { %>
+                           <p style="color: red;">Out of Stock</p>
+                          <% }else{ %>
+                <p>Stock:  <%= item.stock %></p>
+                       <% } %>
+                        <!-- <p class="card-text"> -->
+                <p class="short-description" style="color: black;" ><%= item.description.substring(0,200) %></p>
+                <p class="full-description hidden" style="color: black;" ><%= item.description %></p>
+                <% if (item.description.length > 50) { %>
+                  <a href="#" class="read-more">Read More</a>
+                  <a href="#" class="read-less hidden">Read Less</a>
+                <% } %>
+              <!-- </p> -->
+
+                      
+                    </a>
+                </div>
+
+                <% }) %>
+    
+            </div>
+        </div>
+    </div>
+    <!-- End Blog Section -->	
+
+    
+
+
+    
+
+
+		<%- include('../partials/user/userFooter.ejs') %>
+
+
+
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+              const readMoreButtons = document.querySelectorAll(".read-more");
+              const readLessButtons = document.querySelectorAll(".read-less");
+              const fullDescriptions = document.querySelectorAll(".full-description");
+              const shortDesc = document.querySelectorAll('.short-description');
+          
+              readMoreButtons.forEach(function (readM, index) {
+                readM.addEventListener("click", function (e) {
+                  e.preventDefault();
+                  fullDescriptions[index].classList.remove("hidden");
+                  readM.style.display = 'none';
+                  readLessButtons[index].classList.remove('hidden');
+                  shortDesc[index].classList.add('hidden')
+                });
+              });
+        
+              readLessButtons.forEach((readL,index)=>{
+                readL.addEventListener('click', (e)=>{
+                  e.preventDefault();
+                  fullDescriptions[index].classList.add('hidden');
+                  readLessButtons[index].classList.add('hidden');
+                  readMoreButtons[index].style.display = 'block'
+                  shortDesc[index].classList.remove('hidden')
+                 
+        
+                })
+              })
+        
+            });
+          </script>
+          
+		<script src="js/bootstrap.bundle.min.js"></script>
+		<script src="js/tiny-slider.js"></script>
+		<script src="js/custom.js"></script>

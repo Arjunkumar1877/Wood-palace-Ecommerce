@@ -1,0 +1,112 @@
+<%- include('../partials/admin/adminHeader.ejs') %>
+<br>
+<br>
+<br>
+<br>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel - Order Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #FF5722, #FFEB3B);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            background-color: #fff;
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #FF5722;
+        }
+        th, td {
+            vertical-align: middle;
+        }
+        .btn-view-details {
+            background-color: #FF5722;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Admin Panel - Order Details</h1>
+
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Order Date</th>
+                    <th>Customer Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% order.forEach((order, index) => { %>
+                    <tr>
+                        <td><%= index + 1 %></td>
+                        <td><%= new Date(order.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour12: true }) %></td>
+                        <td><%= order.address.firstName %> <%= order.address.lastName %></td>
+                        <td>
+                            <a href="/admin/order-details/<%= order._id %>" class="btn btn-view-details">
+                                <i class="fas fa-eye"></i> View Details
+                            </a>
+                        </td>
+                    </tr>
+                    <!-- Create a separate table for order items -->
+                    <tr>
+                        <td colspan="4">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Item Name</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% order.items.forEach(item => { %>
+                                        <tr>
+                                            <td><%= item.name %></td>
+                                            <td><%= item.quantity %></td>
+                                            <td><%= item.price %></td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+
+
+</html>
+
+              
+            </tbody>
+        </table>
+    </div>
+
+  
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

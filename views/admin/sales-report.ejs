@@ -1,0 +1,211 @@
+
+<%- include('../partials/admin/adminHeader.ejs') %>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sales Report</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+        background: linear-gradient(135deg, #40ff00, #3806d0);
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      
+    }
+
+    header {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 20px 0;
+      margin-bottom: 20px;
+    }
+
+    .dashboard {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    section {
+      margin-bottom: 30px;
+    }
+
+    .table-container {
+      margin-top: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #dee2e6;
+    }
+
+    th, td {
+      border: 1px solid #dee2e6;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f8f9fa;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 10px;
+      border-top: 1px solid #ccc;
+    }
+
+    .date-picker {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .download-btn {
+      padding: 8px 16px;
+      border: none;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+
+    .download-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <header>
+      <h1>Sales Report</h1>
+    </header>
+
+    <!-- Date picker section -->
+    <section class="date-picker">
+
+      <a href="/admin/get-report">
+
+      <button class="download-btn"  ><i class="fas fa-download"></i> Download Report</button>
+
+
+      </a>
+    </section>
+
+    <section class="product-performance">
+        <div class="table-container">
+          <h2>Product Performance</h2>
+          <table class="table table-striped">
+            <thead class="thead-light">
+              <tr>
+                <th>Product Image</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Payment Method</th>
+                <th>Order Date</th>
+                <th>Order Id</th>
+                <th>Total Price</th>
+                <th>Total Paid</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% order.forEach(orderItem => { %>
+                <% orderItem.items.forEach(product => { %>
+                  <tr>
+                    <td>
+                      <img src="uploads/<%= product.image %>" width="100" alt="">
+                    </td>
+                    <td><%= product.name %></td>
+                    <td><%= product.quantity %></td>
+                    <td><%= product.price %></td>
+                    <td><%= orderItem.orderStatus %></td>
+                    <td><%= orderItem.PaymentMethod%></td>
+                    <td><%= orderItem.createdAt.toLocaleDateString() %></td>
+                    <td><%= orderItem.id %></td>
+                    <td><%= orderItem.totalAmount %></td>
+                    <td><%= orderItem.totalPaid %></td>
+                  </tr>
+                <% }) %>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      
+    <footer>
+      <p>&copy; 2023 Wood Palace</p>
+    </footer>
+  </div>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+const PDFDocument = require('pdfkit');
+const fs = require('fs');
+
+
+
+
+  function sendDate() {
+    const startDate = document.getElementById("startDate").value;
+    const endDate = document.getElementById("endDate").value;
+
+    console.log(startDate, endDate); 
+
+    if (startDate.trim() !== '' && endDate.trim() !== '') { 
+      const data = {
+        startDate: startDate,
+        endDate: endDate
+      };
+
+      console.log(data);
+
+      $.ajax({
+        url: '/admin/report-download',
+        method: "POST",
+        data: data,
+        success: function(response){
+          console.log(response);
+        },
+        error: function(error){
+          console.log(error);
+        }
+      });
+    } else {
+      if (startDate.trim() === '') {
+        alert("Start date is required.");
+      }
+      if (endDate.trim() === '') {
+        alert("End date is required.");
+      }
+    }
+  }
+</script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+<%- include('../partials/admin/adminHeader.ejs') %>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Added Banners</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom Styles -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      
+    }
+    h1 {
+      margin-bottom: 30px;
+    }
+    .banner-list {
+      list-style: none;
+      padding-left: 0;
+    }
+    .banner-item {
+      margin-bottom: 20px;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+    }
+    .banner-img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
+    .btn-add-banner {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>List of Added Banners</h1>
+    <a href="/admin/add-banner-page" class="btn btn-success btn-add-banner">Add Banner</a>
+
+    <% if (banners.length > 0) { %>
+      <ul class="banner-list">
+        <% banners.forEach(banner => { %>
+          <li class="banner-item">
+            <img src="/banner/<%= banner.image %>" alt="Banner Image" class="banner-img">
+            <a href="/admin/delete-banner/<%= banner._id %>" class="btn btn-primary mt-3" target="_blank">Delete</a>
+          </li>
+        <% }); %>
+      </ul>
+    <% } else { %>
+      <p>No banners added yet.</p>
+    <% } %>
+  </div>
+
+  <!-- Bootstrap JS (Optional - If needed) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

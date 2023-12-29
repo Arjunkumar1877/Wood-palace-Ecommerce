@@ -1,0 +1,140 @@
+<%- include('../partials/admin/adminHeader.ejs') %>
+
+
+
+<body>
+  <style>
+    .full-description.hidden,
+    .read-less.hidden {
+      display: none;
+    }
+  
+    .read-more,
+    .read-less {
+      text-decoration: none;
+    }
+  
+    .card {
+      margin-bottom: 10px;
+    }
+  
+    .card-body {
+      padding: 5px;
+    }
+  
+    .btn-sm {
+      padding: 3px 10px;
+      border-radius: 3px;
+    }
+  
+    .stock {
+      margin-bottom: 0;
+    }
+  </style>
+  
+  <section id="header-footer" style="padding-top: 65px;">
+    <a href="/admin/add-productPage" style="padding: 28px;">
+      <button type="button" style="padding: 3px; margin-bottom: 5px;" class="btn btn-success btn-sm">Add Product</button>
+    </a>
+  
+    <div class="row match-height">
+      <% productDb.forEach((item, index) => { %>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card">
+            <div class="card-body">
+              <h6 class="card-title mb-1"><%= item.name %></h6>
+              <p class="card-text mb-1">
+                <span class="short-description"><%= item.description.substring(0, 60) %></span>
+                <span class="full-description hidden"><%= item.description %></span>
+                <% if (item.description.length > 50) { %>
+                  <a href="#" class="read-more">Read More</a>
+                  <a href="#" class="read-less hidden">Read Less</a>
+                <% } %>
+              </p>
+              <p class="card-subtitle text-muted mb-1"><%= item.category.categoryName %></p>
+            </div>
+            <% if (item.images && item.images.length > 0) { %>
+              <img class="img-fluid" src="uploads/<%= item.images[0].url %>" alt="Card image cap">
+            <% } else { %>
+              <p>No image available</p>
+            <% } %>
+
+            <div class="card-body">
+              <p class="card-text mb-1"><%= item.price %></p>
+              <% if (item.stock) { %>
+              <p class="stock mb-0">Stock: <%= item.stock %></p>
+               
+              <% }else{ %>
+                <p style="color: red;">Out of Stock</p>
+                <% } %>
+            </div>
+  
+            <div class="card-footer border-top-blue-grey border-top-lighten-5 text-muted">
+              <a href="/admin/edit-product/<%=item._id%>" class="btn btn-primary btn-sm mr-1" style="text-decoration: none;">Edit</a>
+              <a href="/admin/crop-image/<%=item._id %>" class="btn btn-primary btn-sm mr-1" style="text-decoration: none;">crop</a>
+              <a href="/admin/delete-product/<%=item._id%>" onclick="return confirm('Do you want to delete <%= item.name%>?')" class="btn btn-danger btn-sm" style="text-decoration: none;">Delete</a>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+
+    
+
+    <nav aria-label="Page navigation example" style="display: flex; justify-content: center">
+      <ul class="pagination">
+          <li class="page-item">
+              <% let start = (page === 1) ? limit+1 : page - 1 %>
+              <a class="page-link" href="/admin/product-mg?page=<%= start %>&limit=6" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+              </a>
+          </li>
+          <% for (let i = 0; i < productDb.length+1; i++) { %>
+              <% let active = (page === i + 1) ? 'active' : "" %>
+              <li class="page-item <%= active %>">
+                  <a class="page-link" href="/admin/product-mg?page=<%= i + 1 %>&limit=6"><%= i + 1 %></a>
+              </li>
+          <% } %>
+          <% let end = (page === limit+1) ? 0 : page + 1 %>
+          <li class="page-item">
+              <a class="page-link" href="/admin/product-mg?page=<%= end %>&limit=6" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+              </a>
+          </li>
+      </ul>
+  </nav>
+  </section>
+  
+ 
+
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const readMoreButtons = document.querySelectorAll(".read-more");
+    const readLessButtons = document.querySelectorAll(".read-less");
+    const fullDescriptions = document.querySelectorAll(".full-description");
+
+    readMoreButtons.forEach(function (readM, index) {
+      readM.addEventListener("click", function (e) {
+        e.preventDefault();
+        fullDescriptions[index].classList.remove("hidden");
+        readM.style.display = 'none';
+        readLessButtons[index].classList.remove('hidden');
+      });
+    });
+
+    readLessButtons.forEach((readL,index)=>{
+      readL.addEventListener('click', (e)=>{
+        e.preventDefault();
+        fullDescriptions[index].classList.add('hidden');
+        readLessButtons[index].classList.add('hidden');
+        readMoreButtons[index].style.display = 'block'
+
+      })
+    })
+
+  });
+</script>
+
+</body>

@@ -1,0 +1,314 @@
+<%- include('../partials/admin/adminHeader.ejs') %>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #05582c, #764ba2);
+    margin: 0;
+    padding: 0;
+    color: #fff;
+  }
+
+  .container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    max-width: 600px;
+    width: 100%;
+    
+  }
+
+  .form-updateProduct {
+    text-align: left;
+    padding-top: 40px;
+  }
+
+  .form-updateProduct h1 {
+    color: #007BFF;
+    font-size: 36px;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .form-group {
+    margin-bottom: 25px;
+  }
+
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+
+  select {
+    appearance: none;
+  }
+
+  .error {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+
+  .success {
+    color: #28a745;
+  }
+
+  .btn-primary {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+
+  .edit-image {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .edit-image button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-size: 1px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  h5{
+    color: black;
+  }
+
+  .edit-image button:hover {
+    background-color: #b30015;
+  }
+
+  .edit-image img {
+    max-width: 100px;
+    height: auto;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+</style>
+
+<div class="container">
+  <form class="form-updateProduct" action="/admin/update-product/<%= product._id %>" onsubmit="editProduct(this)" method="post" enctype="multipart/form-data" id="productForm">
+    <h1>Edit Product</h1>
+
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" name="name" required id="name" placeholder="Name" value="<%= product.name %>">
+      <span class="name error"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="category">Choose the category:</label>
+      <select class="form-control" name="category" id="category" required>
+        <option value="">Choose the category</option>
+        <% category.forEach((cat, index) => { %>
+          <option value="<%= cat._id %>"><%= cat.categoryName %></option>
+        <% }) %>
+      </select>
+      <span class="category error"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="price">Price:</label>
+      <input type="number" name="price" required id="price" placeholder="Price" value="<%= product.price %>">
+      <span class="price error"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description:</label>
+      <input type="text" name="description" required id="description" placeholder="Description" value="<%= product.description %>">
+      <span class="description error"></span>
+    </div>
+      <H5>DELETE</H5>
+
+    <div class="edit-image">
+    <% if (product.images ) { %>
+      <% product.images.forEach(image => { %>
+        <div id="<%= image._id %>id">
+          <button class="delete-image"><%= image._id %></button>
+          <img src="/uploads/<%= image.url %>" alt="img" id="<%= image._id %>">
+          
+
+        </div>
+      <% }) %>
+    <% }else{ %>
+      <h4>No images avalable to delete</h4>
+      <% } %>
+    </div>
+
+    <label for="productImages">Product Images (up to 5):</label>
+    <input type="file" id="productImages" name="images" accept="image/*" multiple>
+
+    <div class="form-group">
+      <label for="stock">Stock:</label>
+      <input type="number" name="stock" required id="stock" placeholder="Stock" value="<%= product.stock %>">
+      <span class="stock error"></span>
+    </div>
+    <input type="hidden" value="<%= product._id %>" id="product-id">
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Add this in your HTML file -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  const form = document.getElementById('productForm');
+
+  form.addEventListener('change', function (event) {
+    let valid = true;
+
+    // Validation for the name field
+    const nameField = document.getElementById('name');
+    const nameError = document.querySelector('.name');
+    if (nameField.value.trim() === '') {
+      nameError.textContent = 'Name is required';
+      valid = false;
+    } else {
+      nameError.innerHTML = '<i style="color: green;" class="fa-solid fa-circle-check"></i>';
+    }
+
+    // Validation for the category field
+    const categoryField = document.getElementById('category');
+    const categoryError = document.querySelector('.category');
+    if (categoryField.value === '') {
+      categoryError.textContent = 'Category is required';
+      valid = false;
+    } else {
+      categoryError.innerHTML = '<i style="color: green;" class="fa-solid fa-circle-check"></i>';
+    }
+
+    // Validation for the price field
+    const priceField = document.getElementById('price');
+    const priceError = document.querySelector('.price');
+    if (isNaN(priceField.value) || priceField.value <= 0) {
+      priceError.textContent = 'Price must be a positive number';
+      valid = false;
+    } else {
+      priceError.innerHTML = '<i style="color: green;" class="fa-solid fa-circle-check"></i>';
+    }
+
+    // Validation for the description field
+    const descriptionField = document.getElementById('description');
+    const descriptionError = document.querySelector('.description');
+    if (descriptionField.value.trim() === '') {
+      descriptionError.textContent = 'Description is required';
+      valid = false;
+    } else {
+      descriptionError.innerHTML = '<i style="color: green;" class="fa-solid fa-circle-check"></i>';
+    }
+
+    // Validation for the image1 field
+    const file1 = document.querySelector('input[name="image1"]');
+    const file1Error = document.querySelector('.file1');
+    if (!file1.files[0]) {
+      file1Error.textContent = 'Image1 is required';
+      valid = false;
+    } else {
+      file1Error.innerHTML = '<i style="color: green;" class="fa-solid fa-circle-check"></i>';
+    }
+
+    // Validation for the image2 field
+    const file2 = document.querySelector('input[name="image2"]');
+    const file2Error = document.querySelector('.file2');
+    if (!file2.files[0]) {
+      file2Error.textContent = 'Image2 is required';
+      valid = false;
+    } else {
+      file2Error.innerHTML = '<i style="color: green;" class="fa-solid fa-circle-check"></i>';
+    }
+
+    // Validation for the stock field
+    const stockField = document.getElementById('stock');
+    const stockError = document.querySelector('.stock');
+    if (isNaN(stockField.value) || stockField.value < 1) {
+      stockError.textContent = 'Stock must be a non-negative number';
+      valid = false;
+    } else {
+      stockError.innerHTML = '<i style="color: green;" class="fa-solid fa-circle-check"></i>';
+    }
+
+    if (!valid) {
+      event.preventDefault(); // Prevent form submission if there are validation errors.
+    }
+  });
+</script>
+
+<script>
+
+$(document).ready(function() {
+  $('.delete-image').on('click', function(event) {
+    event.preventDefault();
+    let prodId = document.getElementById('product-id').value;
+    var imgId = $(this).text();
+    console.log(imgId);
+    console.log("hello its ajax");
+    $.ajax({
+      url: '/admin/delete-image',
+      method: 'post',
+      data: {
+        productId: prodId,
+        imageId: imgId
+      },
+      success: function(response) {
+        console.log(response);
+        if (response) {
+          // location.href = `/admin/edit-product/${prodId}`;
+          document.getElementById(`${imgId}id`).innerHTML = ''
+        }
+      },
+      error: function(error) {
+        console.log(error.message);
+      }
+    });
+  });
+});
+
+
+function editProduct(form){
+  Swal.fire({
+  title: 'Saved Changes sucessfully!',
+  text: '',
+  icon: 'success',
+  confirmButtonText: ''
+})
+}
+
+
+</script>

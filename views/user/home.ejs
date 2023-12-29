@@ -1,0 +1,310 @@
+<%- include('../partials/user/userHeader.ejs') %>
+<!-- End Header/Navigation -->
+
+
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Modern Furniture's<span class="d-block"></span></h1>
+                    <p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
+                    <p><a href="" class="btn btn-secondary me-2">Shop Now</a><a href="#" class="btn btn-white-outline">Explore</a></p>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="hero-img-wrap">
+                   <a href="/user/category?id=<%= cat._id %>">
+
+                    <img src="banner/<%= banners[2].image %>" class="img-fluid" style="margin-top: 60px;">
+
+                   </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<div class="banners">
+    <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <% banners.forEach(banner => { %>
+                <div class="carousel-item">
+                    <img src="uploads/<%= banner?.image %>" class="d-block w-100" alt="...">
+                </div>
+            <% }) %>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+<!-- Start Product Section -->
+<div class="product-section">
+    <div class="container">
+        <div class="row">
+
+            <!-- Start Column 1 -->
+            <div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
+                <h2 class="mb-4 section-title">Crafted with excellent material.</h2>
+                <p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
+                <p><a href="shop.html" class="btn">Explore</a></p>
+            </div>
+            <!-- End Column 1 -->
+
+            <!-- Start Column 2 -->
+            <% products.forEach(item => { %>
+                <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+                    <a class="product-item" href="/user/productSinglePage?id=<%= item._id %>" >
+                        <img src="uploads/<%= item?.images[0]?.url %>" style="border-radius: 10px;" class="img-fluid product-thumbnail">
+                        <h3 class="product-title"><%= item.name %></h3>
+                        <strong class="product-price"><%= item.price %></strong>
+
+                        <span class="icon-cross">
+                            <img src="imagesUser/cross.svg" class="img-fluid">
+                        </span>
+                    </a>
+                </div>
+            <% }) %>
+
+            <!-- End Column 2 -->
+        </div>
+    </div>
+</div>
+<!-- End Product Section -->
+
+            <!-- Start Why Choose Us Section -->
+            <div class="why-choose-section">
+                <div class="container">
+                    <div class="row justify-content-between">
+                        <div class="col-lg-6">
+                            <h2 class="section-title">Why Choose Us</h2>
+                            <p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
+    
+                            <div class="row my-5">
+                                <div class="col-6 col-md-6">
+                                    <div class="feature">
+                                        <div class="icon">
+                                            <img src="imagesUser/truck.svg" alt="Image" class="imf-fluid">
+                                        </div>
+                                        <h3>Fast &amp; Free Shipping</h3>
+                                        <p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+                                    </div>
+                                </div>
+    
+                                <div class="col-6 col-md-6">
+                                    <div class="feature">
+                                        <div class="icon">
+                                            <img src="imagesUser/bag.svg" alt="Image" class="imf-fluid">
+                                        </div>
+                                        <h3>Easy to Shop</h3>
+                                        <p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+                                    </div>
+                                </div>
+    
+                                <div class="col-6 col-md-6">
+                                    <div class="feature">
+                                        <div class="icon">
+                                            <img src="imagesUser/support.svg" alt="Image" class="imf-fluid">
+                                        </div>
+                                        <h3>24/7 Support</h3>
+                                        <p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+                                    </div>
+                                </div>
+    
+                                <div class="col-6 col-md-6">
+                                    <div class="feature">
+                                        <div class="icon">
+                                            <img src="imagesUser/return.svg" alt="Image" class="imf-fluid">
+                                        </div>
+                                        <h3>Hassle Free Returns</h3>
+                                        <p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+                                    </div>
+                                </div>
+    
+                            </div>
+                        </div>
+    
+                        <div class="col-lg-5">
+                            
+                                <a class="product-item" href="/user/productSinglePage?id=<%= product1[15]._id %>" >
+                                <div class="img-wrap">
+                                    <img src="uploads/<%= product1[15]?.images[0]?.url %>"  alt="Image" class="img-fluid">
+                                </div>
+                                </a>
+                          
+                        </div>
+    
+                    </div>
+                </div>
+            </div>
+            <!-- End Why Choose Us Section -->
+    
+            <!-- Start We Help Section -->
+            <div class="we-help-section">
+                <div class="container">
+                    <div class="row justify-content-between">
+                        <div class="col-lg-7 mb-5 mb-lg-0">
+                            <div class="imgs-grid">
+                                <div class="grid grid-1"><img src="uploads/<%= product1[35]?.images[0]?.url %>" alt="Untree.co"></div>
+                                <div class="grid grid-2"><img src="uploads/<%= product1[30]?.images[0]?.url %>"></div>
+                                <div class="grid grid-3"><img src="uploads/<%= product1[31]?.images[0]?.url %>"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 ps-lg-5">
+                            <h2 class="section-title mb-4">We Help You Make Modern Interior Design</h2>
+                            <p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque habitant morbi tristique senectus et netus et malesuada</p>
+    
+                            <ul class="list-unstyled custom-list my-4">
+                                <li>Donec vitae odio quis nisl dapibus malesuada</li>
+                                <li>Donec vitae odio quis nisl dapibus malesuada</li>
+                                <li>Donec vitae odio quis nisl dapibus malesuada</li>
+                                <li>Donec vitae odio quis nisl dapibus malesuada</li>
+                            </ul>
+                            <p><a herf="#" class="btn">Explore</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End We Help Section -->
+    
+            <!-- Start Popular Product -->
+            <div class="popular-product">
+                <div class="container">
+                    <div class="row">
+    
+                        <div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
+                            <div class="product-item-sm d-flex">
+                                <div class="thumbnail">
+                                    <a class="product-item" href="/user/productSinglePage?id=<%= product1[35]._id %>" >
+                                    <img src="uploads/<%= product1[35]?.images[0]?.url %>" alt="Image" class="img-fluid">
+                                    </a>
+                                </div>
+                                <div class="pt-3">
+                                    <h3>Nordic Chair</h3>
+                                    <p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio </p>
+                                    <p><a href="#">Read More</a></p>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
+                            <div class="product-item-sm d-flex">
+                                <div class="thumbnail">
+                                    <a class="product-item" href="/user/productSinglePage?id=<%= product1[36]._id %>" >
+                                    <img src="uploads/<%= product1[36]?.images[0]?.url %>" alt="Image" class="img-fluid">
+                                    </a>
+                                </div>
+                                <div class="pt-3">
+                                    <h3>Kruzo Aero Chair</h3>
+                                    <p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio </p>
+                                    <p><a href="#">Read More</a></p>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
+                            <div class="product-item-sm d-flex">
+                                <div class="thumbnail">
+                                    <a class="product-item" href="/user/productSinglePage?id=<%= product1[37]._id %>" >
+                                    <img src="uploads/<%= product1[37]?.images[0]?.url %>"  alt="Image" class="img-fluid">
+                                    </a>
+                                </div>
+                                <div class="pt-3">
+                                    <h3>Ergonomic Chair</h3>
+                                    <p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio </p>
+                                    <p><a href="#">Read More</a></p>
+                                </div>
+                            </div>
+                        </div>
+    
+                    </div>
+                </div>
+            </div>
+            <!-- End Popular Product -->
+    
+
+            <!-- Start Blog Section -->
+            <div class="blog-section">
+                <div class="container">
+                    <div class="row mb-5">
+                        <div class="col-md-6">
+                            <h2 class="section-title">Recent Blog</h2>
+                        </div>
+                       
+                    </div>
+    
+                    <div style="display: flex; justify-content: center ;" class="row">
+    
+                    
+    
+                    
+                        
+                        <div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
+                            <div class="post-entry">
+                                <a class="product-item" href="/user/productSinglePage?id=<%= product1[27]._id %>" ><img src="uploads/<%= product1[27]?.images[0]?.url %>" alt="Image" class="img-fluid" style="border-radius: 10px;"></a>
+                                <div class="post-content-entry">
+                                    <h3 class="desc-sm"><%= product1[27].description.substring(0,104) %></h3>
+                                    <p class="click-more">read more</p>
+                                    <h3 class="desc-lg " style="display: none;" ><%= product1[27].description %></h3>
+                                    <p class="click-less" style="display: none;">read less</p>
+
+                                   <style>
+                                    p{
+                                        cursor: pointer;
+                                    }
+                                 
+                                    .active{
+                                        display: none;
+                                    }
+                                   </style>
+                                    
+                                </div>
+                            </div>
+                        </div>
+    
+                    </div>
+                </div>
+            </div>
+            <script>
+                const descSmall = document.querySelector('.desc-sm');
+                const descLarge = document.querySelector('.desc-lg');
+                const clickLg = document.querySelector('.click-more');
+                const readLess = document.querySelector('.click-less');
+
+                clickLg.addEventListener('click', () => {
+                descSmall.classList.add('active');
+                descLarge.style.display = 'block'
+                clickLg.style.display = 'none'
+                readLess.style.display = 'block'
+
+                 });
+
+                 readLess.addEventListener('click', ()=>{
+                    descLarge.style.display = 'none'
+                    descSmall.classList.remove('active');
+                    clickLg.style.display = 'block'
+                readLess.style.display = 'none'
+
+
+                 })
+
+            </script>
+            <!-- End Blog Section -->	
+    
+  <%- include('../partials/user/userFooter.ejs') %>
+
+
+            <script src="js/bootstrap.bundle.min.js"></script>
+            <script src="js/tiny-slider.js"></script>
+            <script src="js/custom.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/tiny-slider.js"></script>
+<script src="js/custom.js"></script>

@@ -1,0 +1,120 @@
+<%- include('../partials/user/userHeader.ejs') %>
+<br>
+<br>
+<br>
+<br>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel - Order Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #6e8900, #072f0a);
+           
+        }
+        .container {
+            background: linear-gradient(135deg, #8a0606, #000000);
+           
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-weight: 900;
+        }
+        th, td {
+            vertical-align: middle;
+            
+        }
+        .btn-view-details {
+            background-color: green;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4" style="color: antiquewhite; padding: 30px;">Your Orders List</h1>
+
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th style="color: bisque;">Order ID</th>
+                    <th style="color: bisque;">Order Date</th>
+                    <th style="color: bisque;">product</th>
+                    <th style="color: bisque;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% orders.forEach((order, index) => { %>
+                    <tr>
+                        <td style="color: #ffffff;">#<%= order._id.toString().substring(0, 10) %></td>
+                        <td style="color: #ffffff;"><%= new Date(order.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour12: true }) %></td>
+                        <td style="color: #ffffff;"><%= order.address.firstName %> <%= order.address.lastName %></td>
+                        <td style="color: #ffffff;">
+                            <a href="/user/order-details/<%= order._id %>" class="btn btn-view-details">
+                                <i class="fas fa-eye"></i> View Details
+                            </a>
+                        </td>
+                    </tr>
+                    <!-- Create a separate table for order items -->
+                    <tr>
+                        <td colspan="4">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Total Price</th>
+                                        <th>Total Paid</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% order.items.forEach(item => { %>
+                                        <tr>
+                                            <td><%= item.name %> <img src="uploads/<%= item.image %>" width="50" alt=""></td>
+                                            <td><%= item.quantity %></td>
+                                            <td><%= item.price %></td>
+                                            <td><%= order.totalAmount %></td>
+                                            <td></td>
+                                        </tr>
+                                    <% }) %>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><%= order.totalprice %></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+
+
+</html>
+
+              
+            </tbody>
+        </table>
+    </div>
+
+  
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

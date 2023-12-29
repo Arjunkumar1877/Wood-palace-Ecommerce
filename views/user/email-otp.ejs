@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .signup-container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-container {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: none; /* Hide label for now, can be shown if needed */
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        p {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="body">
+        <div class="signup-container">
+            <h1>Enter OTP</h1>
+            <form action="/user/email-verify/<%= user._id %>" method="POST">
+                <div class="input-container">
+                    <label for="number"></label>
+                    <input type="text"  id="number" disabled  value="<%= user.email %>" name="phone" required>
+                </div>
+                <div class="input-container">
+                    <label for="number"></label>
+                    <input type="text" id="number" placeholder="OTP" name="otp" required>
+                </div>
+                <button type="submit">Sign Up</button>
+            </form>
+            <br>
+
+            <div id="demo"></div>
+            <p>Already have an account? <a href="/user/login">Log in here</a></p>
+        </div>
+    </div>
+
+
+	<script>
+
+		let time = 0;
+		
+		function timeInc(){
+			time++;
+		}
+		
+		function timedisplay(){
+			timeInc();
+			document.getElementById('demo').innerHTML = time
+		}
+		
+		let timer = setInterval(timedisplay, 1000);
+		
+		let stopper = setTimeout(()=>{
+		 clearInterval(timer);
+		 document.getElementById('demo').innerHTML = '<a href="/user/resend-email-otp/<%= user._id %>"><button>Resend OTP</button></a>';
+		}, 60000)
+		
+		</script>
+		
+
+</body>
+</html>

@@ -1,0 +1,303 @@
+<body>
+    <%- include('../partials/user/userHeader.ejs') %>
+<!-- End Header/Navigation -->
+
+<style>
+
+
+    .search-bar {
+    margin-left: 550px;
+    margin-bottom: 20px;
+    }
+
+#searchInput {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+    width: 300px; 
+}
+
+.filter input,label {
+  font-size: 20px;
+  color: black;
+}
+
+
+  </style> 
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<div class="modal-body">
+		  ...
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		  <button type="button" class="btn btn-primary">Save changes</button>
+		</div>
+	  </div>
+	</div>
+  </div>
+
+
+    
+
+    <div class="product-section">
+        <div class="search-bar">
+            <input type="text" id="searchInput" onkeyup="sendData(this)" placeholder="Search for products...">
+            <button class="btn-success" style="padding: 10px 15px; background-color: #28a745; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Search</button>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <!-- Filter Section -->
+                <div class="filter" style="width: 20%;">
+                    <h2>Filters</h2>
+
+                    <div class="categories" style="margin-bottom: 20px; margin-top: 20px;">
+
+                        <h3>Categories</h3>
+                      <% headCategory.forEach(cat => { %>
+                        <div class="form-check">
+                            <input class="form-check-input" name="cat-check" type="radio" value="<%= cat._id %>" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                            <%= cat.categoryName %>
+                            </label>
+                          </div> 
+                      <% }) %>
+
+                    </div>
+                    <div class="check">
+                        <h3>Price</h3>
+                        
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" value="1000" name="price-range" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                              1000 - 2000
+                            </label>
+                          </div> 
+
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" value="2000" name="price-range" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                              2000 - 3000
+                            </label>
+                          </div> 
+
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" value="3000" name="price-range" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                              3000 - 4000
+                            </label>
+                          </div> 
+
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" value="4000" name="price-range" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                              4000 - 5000
+                            </label>
+                          </div> 
+
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" value="5000" name="price-range" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                              5000 - 6000
+                            </label>
+                          </div> 
+
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" value="6000" name="price-range" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                              6000 - 7000
+                            </label>
+                          </div> 
+                         
+
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" value="7000" name="price-range" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                              7000 - 8000
+                            </label>
+                          </div> 
+
+                          
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" value="8000" name="price-range" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                              8000 - 9000
+                            </label>
+                          </div> 
+
+                          <button id="filter-button" type="button" class="btn btn-primary" >Filter</button>
+                                                                                                                    
+                    </div>
+                </div>
+                
+                <!-- Product Listing Section -->
+                <div id="searching" style="width: 80%; display: flex; flex-wrap: wrap;">
+                    <% if (product && product.length > 0) { %>
+                        <% product.forEach(item => { %>
+                            <div class="col-12 col-md-3 col-lg-2 mb-4 mb-md-0 product-card" style="padding-bottom: 50px; padding-right: 50px;">
+                                <a class="product-item" href="/user/productSinglePage?id=<%= item._id %>">
+                                    <% if (item.images && item.images.length > 0) { %>
+                                        <img src="uploads/<%= item.images[0].url %>" style="border-radius: 5px;" class="img-fluid product-thumbnail" alt="<%= item.name %>">
+                                    <% } else { %>
+                                        <p style="color: red;">No images available</p>
+                                    <% } %>
+                                    <h3 class="product-title"><%= item.name %></h3>
+                                    <strong class="product-price">₹<%= item.price %></strong>
+                                    <span class="icon-cross">
+                                        <img src="imagesUser/cross.svg" class="img-fluid" alt="Remove">
+                                    </span>
+                                </a>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <h1>No products available</h1>
+                    <% } %>
+                </div>
+
+                <!-- Pagination Section -->
+               
+            </div>
+        </div>
+    </div>
+
+    
+  <%- include('../partials/user/userFooter.ejs') %>
+
+
+            <script src="js/bootstrap.bundle.min.js"></script>
+            <script src="js/tiny-slider.js"></script>
+            <script src="js/custom.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+
+<script>
+<!-- Start Column 2 -->
+
+  function sendData(e) {
+    const searching = document.getElementById('searching');
+
+    let match = e.value.match(/^[a-zA-Z]*/);
+    let match2 = e.value.match(/\s*/);
+    if(match2[0] === e.value){
+        
+    }
+
+    fetch('/user/product-search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ payload: e.value })
+    })
+    .then(res => res.json())
+    .then(data => {
+      let payload = data.payload;
+      console.log(payload);
+      searching.innerHTML = '<hr>';
+
+      payload.forEach((item, index) => {
+        if (index > 0) searching.innerHTML += '<hr>';
+        searching.innerHTML += `
+        <div class="col-12 col-md-3 col-lg-2 mb-4 mb-md-0 product-card"  style="padding-bottom: 50px; padding-right: 50px;">
+          <a class="product-item"  href="/user/productSinglePage?id=${item._id}">
+            <img src="uploads/${item.images[0].url}" class="img-fluid product-thumbnail" alt="${item.name}">
+            <h3 class="product-title">${item.name}</h3>
+            <strong class="product-price">${item.price}</strong>
+            <span class="icon-cross">
+              <img src="imagesUser/cross.svg" class="img-fluid" alt="Remove">
+            </span>
+          </a>
+        </div> `;
+      });
+    })
+    .catch(error => console.error('Error:', error));
+
+    console.log("👋👋👋👋 I am searching in all products");
+  }
+
+
+
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+<script>
+
+$(document).ready(function(){
+
+    $('#filter-button').on('click', function(){
+      const searching = document.getElementById('searching');
+      var catCheck = $('input[type=radio][name="cat-check"]:checked').val();
+      var price = $('input[type=radio][name="price-range"]:checked').val();
+console.log(catCheck);
+     
+
+        if (catCheck !== undefined || price !== undefined) {
+            $.ajax({
+            url: '/user/filter-products',
+            method: 'post',
+            data: {
+            categoryId: catCheck,
+            price: price
+            },
+            success: function(response){
+
+              console.log(response.products)
+if(response){
+
+              
+
+              searching.innerHTML = '<hr>';
+                response.products.forEach((item, index) => {
+        if (index > 0) searching.innerHTML += '<hr>';
+        searching.innerHTML += `
+        <div class="col-12 col-md-3 col-lg-2 mb-4 mb-md-0 product-card"  style="padding-bottom: 50px; padding-right: 50px;">
+          <a class="product-item"  href="/user/productSinglePage?id=${item._id}">
+            <img src="uploads/${item.images[0].url}" class="img-fluid product-thumbnail" alt="${item.name}">
+            <h3 class="product-title">${item.name}</h3>
+            <strong class="product-price">${item.price}</strong>
+            <span class="icon-cross">
+              <img src="imagesUser/cross.svg" class="img-fluid" alt="Remove">
+            </span>
+          </a>
+        </div> `;
+      });
+
+             }
+
+
+
+            },
+            error: function(error){
+                console.log(error)
+            }
+        })
+        } else if(catCheck === undefined || price === undefined){
+	
+            Swal.fire({
+  title: 'Error!',
+  text: 'Please select the category or price to filter the products',
+  icon: 'error',
+  confirmButtonText: 'ok'
+})
+
+        }
+
+    })
+
+})
+
+</script>
+
+
+
+</body>

@@ -1,0 +1,95 @@
+
+<%- include('../partials/user/userHeader.ejs') %>
+
+
+<body>
+    
+    <form action="/user/edit-address/<%= address._id %>" style="display: flex; justify-content: center;"  method="post">
+
+        <div class="col-md-6 mb-5 mb-md-0">
+           
+            <div class="p-3 p-lg-5 border bg-white" style="margin-top: 70px;">   
+                <h1 style="text-align: center; margin-bottom: 10px; text-decoration: underline;">Enter your Details</h1>
+              <div class="form-group row">
+                <div class="col-md-6">
+                  <label for="c_fname" class="text-black">First Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" value="<%= address.firstName %>" id="c_fname" name="firstName">
+                </div>
+                <div class="col-md-6">
+                  <label for="c_lname" class="text-black">Last Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" value="<%= address.lastName %>" id="c_lname" name="lastName">
+                </div>
+              </div>
+        
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <label for="c_companyname" class="text-black">Landmark <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" value="<%= address.landmark %>" id="companyname" name="landmark">
+                </div>
+              </div>
+        
+              <div class="form-group row">
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="exampleFormControlTextarea1" class="form-label">Address</label>
+                        <textarea class="form-control" name="addressDetail" id="exampleFormControlTextarea1" rows="3"><%= address.addressDetail %></textarea>
+                      </div>
+                </div>
+              </div>
+        
+            
+              <div class="form-group row">
+                <div class="col-md-6">
+                  <label for="c_state_country" class="text-black">State  <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" value="<%= address.state %>" id="c_state_country" name="state">
+                </div>
+                <div class="col-md-6">
+                  <label for="c_postal_zip" class="text-black">Posta / Zip <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" value="<%= address.zip %>" id="c_postal_zip" name="zip">
+                </div>
+              </div>
+        
+              <div class="form-group row mb-5">
+                <div class="col-md-6">
+                  <label for="c_phone" class="text-black">Phone <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" value="<%= address.phone %>" id="c_phone" name="phone" placeholder="Phone Number">
+                </div>
+              </div>
+              <div id="liveAlertPlaceholder"></div>
+              <button type="submit" class="btn btn-success" id="liveAlertBtn" >Submit</button>
+    
+                  </div>
+    
+                 
+              </div>
+        
+    
+    
+       </form>
+
+
+       <script>
+           const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+const appendAlert = (message, type) => {
+  const wrapper = document.createElement('div')
+  wrapper.innerHTML = [
+    `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+    `   <div>${message}</div>`,
+    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+    '</div>'
+  ].join('')
+
+  alertPlaceholder.append(wrapper)
+}
+
+const alertTrigger = document.getElementById('liveAlertBtn')
+if (alertTrigger) {
+  alertTrigger.addEventListener('click', () => {
+    appendAlert('Your details has been Edited & Updated', 'success')
+  })
+}
+       </script>
+
+
+</body>
+      

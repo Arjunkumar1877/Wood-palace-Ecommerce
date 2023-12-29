@@ -1,0 +1,106 @@
+<%- include('../partials/user/userHeader.ejs') %>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coupons</title>
+    <style>
+
+
+        .coupons-container {
+            padding-top: 130px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .coupon-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+        }
+
+        .coupon-card h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .coupon-code {
+            font-size: 18px;
+            color: #f44336;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .validity {
+            color: #777;
+            margin-bottom: 15px;
+        }
+
+        .description {
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .cta-button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: #388e3c;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 style="padding-top: 100px; font-size: 70px;">Coupons</h1>
+    <div class="coupons-container">
+        <% coupons.forEach(coupon => { %>
+           
+        <% if (coupon.active) { %>
+            <div class="coupon-card">
+               
+                <% if (new Date(coupon.startDate) < new Date(coupon.expirationDate)) { %>
+                    <h2><%= coupon.discountPercentage %>% Off</h2>
+                    <p class="coupon-code"><span style="color: black;">CODE :-</span> <%= coupon.couponCode %></p>
+                    <p class="validity">Valid until: <%= new Date(coupon.expirationDate).toLocaleDateString() %></p>
+                    <p class="description">Get <%= coupon.discountPercentage %>% off on all orders above ₹500 </p>
+                <% } else { %>
+                    <p class="coupon-code" style="color: #5555552b;">CODE: <%= coupon.couponCode %></p>
+
+                    <h5 style="color: red;">Code expired</h5>
+                <% } %>
+               
+            </div>
+        <% }else{ %>
+
+            <div class="coupon-card">
+              
+                    <p class="coupon-code" style="color: #5555552b;">CODE: <%= coupon.couponCode %></p>
+
+                    <h5 style="color: rgb(5, 143, 28); font-size: 20px; font-weight: 700;">Code Used</h5>
+               
+            </div>
+            <% } %>
+
+        <% }) %>
+    </div>
+    
+</body>
+
+</html>

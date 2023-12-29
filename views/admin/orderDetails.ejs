@@ -1,0 +1,245 @@
+<%- include('../partials/admin/adminHeader.ejs') %>
+<br>
+<br>
+<br>
+<br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Order Management</title>
+    <!-- Include custom fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+    
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif; /* Use the custom font */
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            background-color: #232f3e;
+            color: #fff;
+            padding: 20px 0;
+        }
+        .content {
+            padding: 20px;
+        }
+        .product {
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        .product h3 {
+            font-size: 24px;
+            margin: 0;
+        }
+        .product p {
+            margin: 10px 0;
+        }
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .button {
+            background-color: #ff9900;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #e6830d;
+        }
+        .order-details {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        .order-details h2 {
+            font-size: 28px;
+            margin: 0;
+        }
+        .order-details p {
+            margin: 10px 0;
+        }
+        .admin-operations {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .admin-operations button {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .admin-operations button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="header" style="text-align: center; background-color: #232f3e; color: #fff; padding: 20px 0;">
+        <h1>Admin Order Management</h1>
+    </div>
+    <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 20px; background-color: #fff; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        <div class="content">
+            <% order.items.forEach(item => { %>
+             
+            <div class="product" style="border: 1px solid #ddd; margin-bottom: 20px; padding: 20px; background-color: #fff; box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); border-radius: 5px;">
+                <img src="/uploads/<%= item.image %>" width="100" alt="">
+                <h3><%= item.name %></h3>
+                <p>Price: ₹ <%= item.price %></p>
+                <p>Quantity: <%= item.quantity %></p>
+                <p id="update-order">Order Status:  <%= order.orderStatus%> <i class="fas fa-check-circle"></i></p>
+                <div class="actions">
+                </div>
+            </div>
+         
+            <% }) %>
+
+            <div class="order-details" style="background-color: #fff; border: 1px solid #ddd; padding: 20px; margin-top: 20px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); border-radius: 5px;">
+               
+                <% if (order.returned && order.returnApprovel) { %>
+                  <h2 style="color: #4CAF50;">Order Returned</h2>
+                <% }else if(order.returned){ %>
+                    <h1 style="color: brown;">User requested for returning the order</h1>
+                    <a href="/admin/return-approve/<%= order._id %>"><button class="btn-success">Approve</button></a>
+                    <% } %>
+
+                <h2>Order Details</h2>
+                <h4>Total :-  ₹<%= order.totalprice %></h4>
+                <p>Package was handed to resident</p>
+          
+
+                <% if (!order.returnApprovel) { %>
+                    <div class="admin-operations">
+
+                        <% if (!order.canceled) { %>
+                                          <!-- Update the buttons with unique ids and a class -->
+    <div class="admin-operations">
+        <button style="margin-left: 65px;" id="approve-button" class="btn btn-success action-button">Order Placed</button><span  id="order-state"><% if (order.orderStatus === "Order Placed") { %>
+            <i  class="fa-solid fa-circle-check text-success"></i>
+        <% } %></span>
+        <button style="margin-left: 65px;" id="packed-button" class="btn btn-primary action-button">Packed</button><span  id="order-state"><% if (order.orderStatus === "Packed") { %>
+            <i  class="fa-solid fa-circle-check text-success"></i>
+        <% } %></span>
+        <button style="margin-left: 65px;" id="shipping-button" class="btn btn-success action-button">Shipping</button><span  id="order-state"><% if (order.orderStatus === "Shipping") { %>
+            <i  class="fa-solid fa-circle-check text-success"></i>
+        <% } %></span>
+        <button style="margin-left: 65px;" id="out-for-delivery-button" class="btn btn-warning action-button">Out for Delivery</button><span id="order-state"><% if (order.orderStatus === "Out for Delivery") { %>
+            <i  class="fa-solid fa-circle-check text-success"></i>
+        <% } %></span>
+        <button style="margin-left: 65px;" id="delivered-button" class="btn btn-info action-button">Delivered</button><span id="order-state"><% if (order.orderStatus === "Delivered") { %>
+            <i  class="fa-solid fa-circle-check text-success"></i>
+        <% } %></span>
+    </div>
+    
+                        <% }else{ %>
+    
+                            <h1 style="color: red;">Cancelled Order !!!⛔</h1>
+    
+                            <% } %>
+                    </div>
+                <% }else{ %>
+                    <h2 style="color: #e6830d;">Order Returned !!!⛔</h2>
+                    <% } %>
+
+
+                <h1>Customer Info</h1>
+                <h4><%= order.address.firstName %> <%= order.address.lastName %> <i class="fas fa-user"></i></h4>
+                <p>Phone: <%= order.address.phone %></p>
+                <p>Landmark: <%= order.address.landmark %></p>
+                <p>State: <%= order.address.state %> - <%= order.address.zip %> <i class="fas fa-map-marker-alt"></i></p>
+                <h3>Address: <%= order.address.addressDetail %></h3>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="order-id" value="<%= order._id %>">
+    <!-- Include Bootstrap and Font Awesome JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+      <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"
+      ></script>
+  
+  
+  <script>
+
+$(document).ready(function () {
+    $('.action-button').on('click', function (e) {
+        var orderStatus = $(this).text() 
+        const orderId = document.getElementById('order-id').value;
+        console.log(orderId);
+
+        $.ajax({
+            type: 'POST',
+            url: '/admin/update-order-status',
+            data: {
+                orderStatus: orderStatus,
+                orderId: orderId
+               
+            },
+            success: function (response) {
+              console.log(orderStatus)
+            document.getElementById('update-order').innerHTML = `Order Status:   ${orderStatus} <i class="fas fa-check-circle"></i>`
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+    });
+
+
+
+});
+
+  
+  
+  
+  </script>
+  
+
+
+
+
+
+
+
+
+</body>
+</html>

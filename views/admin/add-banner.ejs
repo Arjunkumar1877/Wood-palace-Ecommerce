@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Banner Form</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css"> <!-- Your custom CSS file -->
+</head>
+<style>
+    /* Custom CSS for additional styling */
+.custom-form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: bold;
+}
+
+/* You can add more custom styles here as needed */
+
+</style>
+<body>
+
+<div class="container mt-5">
+  <form action="/admin/add-banner" method="POST" enctype="multipart/form-data" class="custom-form">
+    <div class="form-group">
+      <label for="bannerImage">Banner Image:</label>
+      <input type="file" id="bannerImage" name="image" accept="image/*" required class="form-control-file">
+    </div>
+  
+    <div class="form-group">
+      <label for="description">Description:</label>
+      <input type="text" id="description" name="description" required class="form-control">
+    </div>
+  
+    <button type="submit" class="btn btn-primary">Add Banner</button>
+  </form>
+</div>
+
+</body>
+</html>

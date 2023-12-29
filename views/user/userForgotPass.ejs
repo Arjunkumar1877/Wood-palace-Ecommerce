@@ -1,0 +1,24 @@
+
+
+
+
+<body style="font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f4; padding: 20px;">
+
+    <div style="background-color: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); max-width: 400px; margin: 0 auto;">
+        <h1 style="color: #333; font-size: 24px;">Forgot Password</h1>
+
+        <p style="color: #666; font-size: 16px;">Enter your Mobile No to reset your password.</p>
+
+        <form action="/user/reset-password" method="POST">
+            <div style="margin-bottom: 20px;">
+                <label for="number" style="font-size: 16px; display: block; color: #333;">Mobile:</label>
+                <input type="tel" id="number" name="phone" style="width: 95%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            </div>
+
+            <button type="submit" style="background-color: #007bff; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Reset Password</button>
+        </form>
+
+        <p style="color: #666; font-size: 14px; margin-top: 20px;">Remember your password? <a href="/user/login" style="color: #007bff; text-decoration: none;">Log in</a></p>
+    </div>
+
+</body>

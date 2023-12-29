@@ -1,0 +1,68 @@
+<%- include('../partials/admin/adminHeader.ejs') %>
+
+
+
+<div
+  class="container-table"
+  style="
+    display: flex;
+    justify-content: center;
+    width: 90%;
+    align-items: center;
+    text-align: center;
+    padding: 124px;
+    margin: auto;
+    flex-direction: column;
+    background-color: black;
+    height: 100%;
+    width: 100%;
+  "
+>
+<a href="/admin/add-coupon"><button class="btn-success" >Add Coupon</button></a>
+  <table class="table-success table  table-hover" style="margin-top: 50px;">
+ 
+    <thead class="bg- text-white">
+      <tr>
+        <th scope="col">No</th>
+        <th scope="col">Coupon Code</th>
+        <th scope="col">Disound Amount</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">End Date</th>
+        <th scope="col">Status</th>
+        <th scope="col">Expiry</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <% offer.forEach((code, index) => { %>
+    <tbody>
+      
+        <tr style="margin: auto">
+          <th scope="row"><%= index+1 %></th>
+          <td><%= code.couponCode %></td>
+          <td><%= code.discountPercentage %>%</td>
+          <td><%= new Date(code.startDate).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour12: true })%></td>
+          <td><%= new Date( code.expirationDate).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour12: true })%></td>
+          <td><% if (code.active) { %>
+             <span style="border-radius: 25px; color: rgb(0, 0, 0); padding: 5px;background-color: rgb(7, 198, 55);"  >Unused</span>
+          <% }else{ %>
+            <span style="border-radius: 25px; color: rgb(255, 255, 255); padding: 5px;background-color: rgb(198, 7, 7);"  >Used</span>
+
+            <% } %>
+          </td>
+          <td>
+          <% if (code.expired) { %>
+            <span style="border-radius: 25px; color: rgb(255, 255, 255); padding: 5px;background-color: rgb(198, 7, 7);"  >Inactive</span>            
+          <% }else{ %>
+            <span style="border-radius: 25px; color: rgb(0, 0, 0); padding: 5px;background-color: rgb(7, 198, 55);">Active</span>
+            <% } %>
+          </td>
+          
+          <td>
+            <a href="/admin/delete-coupon/<%= code._id %>"><button class="btn-danger" style="border-radius: 25px">delete</button></a>
+          </td>
+        </tr>
+     
+    </tbody>
+     <% }) %>
+  </table>
+</div>

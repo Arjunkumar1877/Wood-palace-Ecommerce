@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Category Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="Your-Integrity-Here" crossorigin="anonymous">
+  <style>
+    body {
+      background-color: #f2f2f2;
+      
+    }
+    .category-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding-top:  150px;
+    }
+    .category-content {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    .category-form {
+      width: 100%;
+      max-width: 400px;
+      margin-top: 20px;
+    }
+    .form-label {
+      font-weight: bold;
+    }
+    .btn-primary {
+      background-color: #007BFF;
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+    .btn-danger {
+      background-color: #DC3545;
+      border: none;
+    }
+    .btn-danger:hover {
+      background-color: #a71d2a;
+    }
+    .btn-success {
+      background-color: #28A745;
+      border: none;
+    }
+    .btn-success:hover {
+      background-color: #1d943f;
+    }
+  </style>
+</head>
+<body>
+  <%- include('../partials/admin/adminHeader.ejs') %>
+
+
+
+  <div class="category-container">
+    <div class="category-content">
+      <h1 class="text-center">Category Management</h1>
+      <form class="category-form" action="/admin/edit-category/<%= category._id %>" method="post" onsubmit="return validateForm()">
+
+        <table class="table">
+        <h2 class="text-center">Edit Category</h2>
+        <div class="mb-3">
+          <input type="text" class="form-control" id="categoryName" value="<%= category.categoryName %>" name="categoryName" placeholder="Enter new Category" required>
+          <div id="categoryNameError" class="text-danger"></div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Add</button>
+      </form>
+    </div>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="Your-Integrity-Here" crossorigin="anonymous"></script>
+</body>
+</html>

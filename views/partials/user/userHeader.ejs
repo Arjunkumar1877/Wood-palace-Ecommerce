@@ -1,0 +1,59 @@
+<style>
+    .navbar-head{
+        position: fixed;
+        z-index: 999;
+        width: 100%;
+        height: 80px;
+    }
+</style>
+
+
+
+<nav class="custom-navbar navbar navbar-head navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+
+    <div class="container">
+        <a class="navbar-brand" href="/user">Wood Palace.<span>.</span></a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsFurni">
+            <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+                <li><a class="nav-link" href="/user">HOME</a></li>
+                <li><a class="nav-link" href="/user/all-products">ALL PRODUCTS</a></li>
+
+                <% headCategory.forEach((cat, index) => { %>
+                <li><a class="nav-link" href="/user/category?id=<%= cat._id%>"><%= cat.categoryName %></a></li>
+                    <% }) %>
+                </select>
+            </ul>
+
+            <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+                <li><a class="nav-link" href="/user/user-profile"><img src="imagesUser/user.svg"></a></li>
+                <li><a class="nav-link" href="/user/cart"><img src="imagesUser/cart.svg"></a></li>
+
+                
+                <% if (user) { %>
+                    <li style="font-weight: 600; margin-left: 30px;"><a class="nav-link" href="/user/logout"> Logout</a></li>
+                <% }else{ %>
+                    <li style="font-weight: 600; margin-left: 30px;"><a class="nav-link" href="/user/signup"> Signup</a></li>
+                    <% } %>
+
+                    <% if (user) { %>
+                        <li style="font-weight: 600; margin-left: 30px;"><a class="nav-link" href="/user/coupons"><i class="fa-solid fa-money-bill" style="color: aliceblue; font-size: 20px;"></i></a></a></li>
+                    <% } %>
+                
+            </ul>
+
+        </div>
+    
+    </div>
+    <li><a href="/user/wishlist"><i class="fa-regular fa-heart" style="    color: aliceblue;
+        margin-left: -142px;
+        font-size: x-large;
+        margin-bottom: 35px;"></i></a></li>
+
+
+</nav>
+<!-- End Header/Navigation -- -->

@@ -1,0 +1,151 @@
+
+
+
+<%- include('../partials/user/userHeader.ejs') %>
+
+   
+
+<body>
+
+    <section style="background-color: #eee;padding-top: 50px ;">
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mb-4 ">
+          <div class="card-body text-center">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+              class="rounded-circle img-fluid" style="width:50px;">
+            <h5 class="my-3"><%= user.name.substring(0,5) %></h5>
+            <div class="d-flex justify-content-center mb-2">
+              <a href="/user/edit-profile"><button type="button" class="btn btn-outline-primary ms-1">Edit profile</button></a>
+            </div>
+          </div>
+
+          
+
+        </div>
+
+        
+        <div class="card mb-2 bg-dark text-white" style="cursor: pointer;">
+            <div class="card-body text-center">
+                <a style="text-decoration: none;" href="/user/manage-address"><i class="fa-solid fa-address-book" style="margin-left: -100px; font-size: 35px;"></i><span style="margin-left: 20px; font-size: 20px;">MANAGE ADDRESSES</span></a>
+            </div>
+          </div>
+
+        <div class="card mb-2" style="cursor: pointer;">
+            <div class="card-body text-center">
+                <a style="text-decoration: none;" href="/user/users-orders"><i class="fa-solid fa-bag-shopping" style="margin-left: -220px; font-size: 35px;"></i><span style="margin-left: 20px; font-size: 20px;">ORDERS</span></a>
+            </div>
+          </div>
+
+          <div class="card mb-2" style="cursor: pointer;">
+            <div class="card-body text-center">
+                <a style="text-decoration: none;" href="/user/wallet"><i class="fa-solid fa-credit-card" style="margin-left: -195px; font-size: 35px;"></i><span style="margin-left: 20px; font-size: 20px;">WALLET</span></a>
+            </div>
+          </div>
+
+          <div class="card mb-2" style="cursor: pointer;">
+            <div class="card-body text-center">
+                <a style="text-decoration: none;" href="/user/logout"><i class="fa-solid fa-power-off" style="margin-left: -220px; font-size: 35px;"></i><span style="margin-left: 20px; font-size: 20px;">LOGOUT</span></a>
+            </div>
+          </div>
+
+   
+
+      </div>
+      <div class="col-lg-8">
+
+        <% if (!userAddresses) { %>
+
+          
+        <div style="display: flex; justify-content: space-between;"><h2>ADDRESSES</h2>  <a href="/user/add-address-page"><button class="btn-success">Add Address</button></a></div>
+        <h1>No Address Available</h1>
+        <% } else { %>
+     
+          <div style="display: flex; justify-content: space-between;"><h2>ADDRESSES</h2>  <a href="/user/add-address-page"><button class="btn-success">Add Address</button></a></div>
+        
+        <% userAddresses.address.forEach(data => { %>
+          <div class="card mb-2">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h4 style="font-size: 18px;"><%= data.firstName %> <%= data.lastName %></h4>
+                  <p style="font-size: 14px;">+91 <%= data.phone %></p>
+                  <p style="font-size: 14px;"><%= data.addressDetail %></p>
+                  <p style="font-size: 14px;"><%= data.state %>-<%= data.zip %></p>
+                </div>
+                <div>
+                  <a href="/user/edit-address/<%= data._id %>" class="btn btn-success">Edit</a>
+                  <a href="/user/delete-address/<%= data._id %>"  onclick="return deleteAddress(event)"  class="btn btn-danger">Delete</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+
+        <% } %>
+        
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+          function deleteAddress(event) {
+            event.preventDefault(); // Prevents the default behavior of the link
+        
+            const swalWithBootstrapButtons = Swal.mixin({
+              customClass: {
+                confirmButton: "btn btn-success",
+                cancelButton: "btn btn-danger"
+              },
+              buttonsStyling: false
+            });
+        
+            return swalWithBootstrapButtons.fire({
+              title: "Are you sure?",
+              text: "You won't be able to revert this!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonText: "Yes, delete it!",
+              cancelButtonText: "No, cancel!",
+              reverseButtons: true
+            }).then((result) => {
+              if (result.isConfirmed) {
+                swalWithBootstrapButtons.fire({
+                  title: "Deleted!",
+                  text: "Your file has been deleted.",
+                  icon: "success"
+                });
+                // TODO: Implement deletion logic here
+                // For now, returning true to simulate deletion
+                // Once deletion logic is implemented, execute the actual deletion process here
+        
+                // Redirect to the delete route after deletion logic
+                window.location.href = event.target.href; // This will navigate to the delete route
+              } else {
+                swalWithBootstrapButtons.fire({
+                  title: "Cancelled",
+                  text: "Your file is safe :)",
+                  icon: "info"
+                });
+                return false; // Cancel deletion
+              }
+            });
+          }
+        </script>
+        
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<%- include('../partials/user/userFooter.ejs') %>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  </body>
