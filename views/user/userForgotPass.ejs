@@ -7,12 +7,12 @@
     <div style="background-color: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); max-width: 400px; margin: 0 auto;">
         <h1 style="color: #333; font-size: 24px;">Forgot Password</h1>
 
-        <p style="color: #666; font-size: 16px;">Enter your Mobile No to reset your password.</p>
+        <p style="color: #666; font-size: 16px;">Enter your Email to reset your password.</p>
 
         <form action="/user/reset-password" method="POST">
             <div style="margin-bottom: 20px;">
-                <label for="number" style="font-size: 16px; display: block; color: #333;">Mobile:</label>
-                <input type="tel" id="number" name="phone" style="width: 95%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                <label for="number" style="font-size: 16px; display: block; color: #333;">Email:</label>
+                <input type="email" id="email" name="email" style="width: 95%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
             </div>
 
             <button type="submit" style="background-color: #007bff; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Reset Password</button>

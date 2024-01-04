@@ -102,8 +102,14 @@
 
     
     <label for="productImages">Product Images (up to 5):</label>
-    <input type="file" id="productImages" name="images" accept="image/*" multiple required>
-    
+    <div class="form-group image-wrapper" id="images-to-upload">
+      <label for="image">Image:</label>
+      <input type="file" class="form-control-file" id="image" name="images" accept="image/*" onchange="addImageWrapper()"  multiple>
+      <!-- Image preview container -->
+      <div id="image-preview"></div>
+  </div>
+
+
 
     <div class="form-group">
       <label for="stock">Stock</label>
@@ -217,3 +223,38 @@ form.addEventListener('submit', function () {
 });
 </script>
 
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script>
+   
+   function addImageWrapper() {
+    let wrapper = $('<div class="image-wrapper" />');
+    $('#images-to-upload').append(wrapper);
+
+    var input = document.getElementById('image');
+
+    if (input.files && input.files.length > 0) {
+        for (let i = 0; i < input.files.length; i++) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var closeBtn = $('<span class="close" onclick="removeImageWrapper(this)">×</span>');
+
+                var img = $('<img class="img-thumbnail" style="max-width: 100px; max-height: 100px;">');
+                img.attr('src', e.target.result);
+
+                wrapper.append(closeBtn);
+                wrapper.append(img);
+            };
+
+            reader.readAsDataURL(input.files[i]);
+        }
+    }
+}
+
+function removeImageWrapper(element) {
+    $(element).parent().remove();
+}
+</script>

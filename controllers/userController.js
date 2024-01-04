@@ -415,7 +415,7 @@ module.exports.emailOtpVerify = async(req,res)=>{
 
       const saved = await userDb.save();
       if(saved){
-        res.render('user/login');
+        res.render('user/login', {pass: ''});
       }else{
         res.redirect('/user/email-otp/'+ userDb._id);
       }
@@ -512,7 +512,7 @@ module.exports.forgotPassword = async (req, res) => {
   try {
     const user = await User.find({});
 
-    res.render("user/userForgotPass", { user: user });
+    res.render("user/userForgotPass", { user: user , changepass: false});
   } catch (error) {
     console.log(error.message);
   }
@@ -522,40 +522,79 @@ module.exports.forgotPassword = async (req, res) => {
 module.exports.resetPassword = async (req, res) => {
   try {
     const OTP = otpGenerator.generate(6, {
-      digits: true,
-      alphabets: false,
-      upperCase: true,
+      upperCaseAlphabets: true,
+      lowerCaseAlphabets: false,
       specialChars: false,
+      digits: false,
     });
-
-    const phone = req.body.phone;
-    console.log(OTP);
-
-    const accountSid = "AC3149c62e555ae65b32b9da0828582b06";
-    const authToken = "38c9e081f8015f0d82ae53af1ceffc23";
-    const twilioPhoneNumber = "+12567870140";
-
-    const client = new twilio(accountSid, authToken);
-
-    async function sendSMS(to, body) {
-      try {
-        const message = await client.messages.create({
-          body: body,
-          from: twilioPhoneNumber,
-          to: to,
-        });
-        console.log(`Message sent with SID: ${message.sid}`);
-      } catch (error) {
-        console.error(`Error sending message: ${error.message}`);
+  
+    const userDb = await User.findOneAndUpdate({email: req.body.email},{
+      $set: {
+        otp: OTP
       }
-    }
+    });    
+    
+    console.log("🔥🔥🔥🔥" + OTP);
+      const newEmail = userDb.email;
+    
+      const sendVerifyMail = async (email, otp) => {
+        try {
+          const https = require('https');
+    
+          const agent = new https.Agent({
+            rejectUnauthorized: false, // Set this to true in production
+          });
+    
+          const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
+            requireTLS: true,
+            auth: {
+              user: 'arjun.tech177@gmail.com',
+              pass: 'nctv beiz wucl vlnh',
+            },
+            tls: {
+              rejectUnauthorized: false, // Set this to true in production
+            },
+            agent, // Pass the agent to nodemailer
+          });
+    
+          const mailOptions = {
+            from: 'arjun.tech177@gmail.com',
+            to: email,
+            subject: 'Verification Mail',
+            html: `<p>Hi, your OTP for signing up is: ${otp}</p>`,
+          };
+    
+          // Promisify sendMail
+          const sendMailPromise = new Promise((resolve, reject) => {
+            transporter.sendMail(mailOptions, function (error, info) {
+              if (error) {
+                console.error(error);
+                reject(error);
+              } else {
+                console.log('Email has been sent', info.response);
+                resolve(info);
+              }
+            });
+          });
+    
+          // Wait for the email to be sent
+          await sendMailPromise;
+    
+          return true; // Indicate success
+        } catch (error) {
+          console.error(error.message);
+          return false; // Indicate failure
+        }
+      };
+    
+        const sendMailResult = await sendVerifyMail(newEmail, OTP);
+    
+       
 
-    const recipientNumber = req.body.phone;
-    const messageBody = `Your Verification code is ${OTP}`;
-
-    await sendSMS(recipientNumber, messageBody);
-
-    const user = await User.findOne({ phone: phone });
+    const user = await User.findOne({ email: req.body.email });
 
     if (user) {
   
@@ -563,7 +602,7 @@ module.exports.resetPassword = async (req, res) => {
 
   await user.save();
 
-      res.render("user/verifyPassword", { user: user });
+      res.render("user/verifyPassword", { user1: user,  changepass: false});
     } else {
       res.send("Entered phone number is invalid");
     }
@@ -576,9 +615,10 @@ module.exports.resetPassword = async (req, res) => {
 // <-------------------------------------------------------| POSTING & VERIFYING OTP & ADDING NEW PASSWORD  ----------------------------------|>
 module.exports.addNewPassword = async (req, res) => {
   const id = req.params.id;
-
+  
   try {
-    const user = await User.findById(id);
+
+      const user = await User.findOne({_id: id});
    
     const hashedPass = await bcrypt.hash(req.body.password, saltRounds);
     const otpBody = req.body.otp
@@ -587,15 +627,51 @@ module.exports.addNewPassword = async (req, res) => {
       user.password = hashedPass;
       await user.save();
 
-      res.render("user/login");
+      res.render("user/login", {pass: ''});
     } else {
       res.send("Invalid user or OTP");
     }
+    
+    
   } catch (error) {
     console.log("Try catch error in addNewPassword 🤷‍♂️📀🤷‍♀️");
     console.log(error.message);
   }
 };
+
+
+module.exports.changePassword = async(req,res) =>{
+  try {
+    const oldPassword = req.body.oldPassword;
+  const newPassword = req.body.passwordNew
+    if(req.session.user){
+      const id = req.session.user._id
+      const user = await User.findOne({_id: id})
+      
+    const passwordMatch = await bcrypt.compare(oldPassword, user.password);
+    const hashedPass = await bcrypt.hash(newPassword, saltRounds);
+
+    if(passwordMatch){
+const update = await User.findOneAndUpdate({_id: id}, {
+  password: hashedPass
+})      
+      const saved = await update.save();
+
+      if(saved){
+        res.redirect('/user/user-profile')
+      }else{
+        res.json('changing password failed...');
+      }
+
+    }
+    }
+
+
+  
+  } catch (error) {
+    console.log(error.message)
+  }
+}
 
 // <-------------------------------------------------------| RENDERING HOME PAGE -------------------------------------------------------------|>
 module.exports.homePage = async (req, res) => {
@@ -646,12 +722,16 @@ module.exports.userProfile = async (req, res) => {
 
 // <-------------------------------------------------------| RENDERING EDIT USER PROFILE PAGE ------------------------------------------------|>
 module.exports.editUserProfilePage = async(req,res)=>{
+ try {
   const user = req.session.user;
   const headCategory = await getCategory();
   const user1 = await User.findOne({_id: user._id})
   console.log(user1);
 
  res.render('user/editUserProfile', {user: user1, headCategory});
+ } catch (error) {
+  console.log(error.message)
+ }
 };
 
 // <-------------------------------------------------------| POSTING EDITED USER PROFILE PAGE ------------------------------------------------|>
@@ -678,6 +758,18 @@ module.exports.editUserProfile = async(req,res)=>{
 
 };
 
+// <-------------------------------------------------------| RENDERING EDIT USER PASSWORD PAGE ------------------------------------------------|>
+module.exports.editUserPasswordPage = async(req,res)=>{
+  try {
+
+    const id = req.session.user._id;
+    const user = await User.findOne({_id: id});
+
+    res.render('user/verifyPassword', {user: user, changepass: true})
+  } catch (error) {
+    console.log(error.message)
+  }
+}
 
 
 

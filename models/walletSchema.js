@@ -4,8 +4,7 @@ const Schema = mongoose.Schema;
 
 const walletSchema = Schema({
       userId: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User',
+        type: String,
         require: true
       },
       walletBalance: {

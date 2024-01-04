@@ -18,6 +18,8 @@ const {
   emailOtp,
   emailOtpVerify,
   resendEmailOtp,
+  editUserPasswordPage,
+  changePassword,
 } = require("../controllers/userController");
 const {
   blockChecker,
@@ -97,6 +99,8 @@ router.post("/reset-password", UserLoginChecker, resetPassword); //-------------
 
 router.post("/add-newPassword/:id", addNewPassword); //--------------------------------------------===| ADDING NEW PASSWORD
 
+router.post("/add-change-password", changePassword); //--------------------------------------------===| ADDING NEW PASSWORD
+
 router.post("/verify", UserLoginChecker, verifyOtp); //--------------------------------------------===| VERIFY OTP
 
 router.get("/", homePage); //----------------------------------------------------------------------===| HOME PAGE
@@ -114,6 +118,8 @@ router.get("/category", blockChecker, productLoad); //--------------------------
 router.get("/user-profile", loginOrNot, userProfile); //-------------------------------------------===| USER PROFILE PAGE
 
 router.get("/edit-profile", blockChecker, editUserProfilePage); //---------------------------------===| EDIT USER PROFILE PAGE
+
+router.get("/change-password", blockChecker, editUserPasswordPage); //---------------------------------===| EDIT USER PASSWORD PAGE
 
 router.post("/update-profile", blockChecker, editUserProfile); //----------------------------------===| UPDATE EDITED USER PROFILE
 
