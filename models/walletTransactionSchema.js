@@ -7,7 +7,9 @@ const transactionSchema = new schema({
         required: true
 
     },
-    transaction: {
+    transaction: [
+        {
+        mode: {
         type: String,
         required: true,
     },
@@ -19,6 +21,8 @@ const transactionSchema = new schema({
        type: Date,
        default: Date.now
     }
+}
+]
 })
 
 module.exports.Transaction =  mongoose.model('Transaction', transactionSchema);

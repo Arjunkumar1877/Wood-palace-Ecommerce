@@ -313,59 +313,54 @@ module.exports.orderDetail = async(req,res)=>{
 // <-------------------------------------------------------| CANCEL ORDER AJAX FUNCTION -----------------------------------------------|>
 module.exports.cancelOrder = async (req, res) => {
   try {
-    const orderId = req.params.id;
-    const userId = req.session.user._id
-
-    const order = await Orders.findOneAndUpdate({_id: orderId},{
-      $set: {
-        canceled: true
-      }
-    })
-    if (!order) {
-      console.log('Order not found');
-      return res.status(404).send('Order not found');
-    }
-
-  
-    const wallet = await Wallet.findOne({ userId: order.userId });
-    if (!wallet) {
-      const newWallet = new Wallet({
-        userId: order.userId,
-        walletBalance: order.totalAmount,
-      });
-      await newWallet.save();
-
-      if(order.totalprice !== 0){
-        const trans = new Transaction({
-          userId: userId,
-          transaction: 'Credit',
-          amount: order.totalAmount
-        })
-        await trans.save();
     
-       }else{
-        console.log('total is zeroo 🔥🔥🔥🔥⛔⛔⛔⛔⛔⛔🤷‍♂️🤷‍♂️🤷‍♂️🤷‍♂️🤷‍♂️🤷‍♂️')
-       }
-      console.log('New wallet created with canceled order amount');
-    } else {
-      wallet.walletBalance += order.totalAmount;
-      await wallet.save();
 
-   if(order.totalAmount !== 0){
-    const trans = new Transaction({
-      userId: userId,
-      transaction: 'Credit',
-      amount: order.totalAmount
-    })
-    await trans.save();
+    const userId = req.session.user._id;
+    const orderId = req.params.id;
 
-   }else{
-    console.log('total is zeroo 🔥🔥🔥🔥⛔⛔⛔⛔⛔⛔🤷‍♂️🤷‍♂️🤷‍♂️🤷‍♂️🤷‍♂️🤷‍♂️')
-   }
-      console.log('Existing wallet updated with canceled order amount');
+    const cancelOrder = await Orders.findOneAndUpdate(
+        { _id: orderId, userId: userId },
+        { $set: { canceled: true } },
+        { new: true }
+    );
+
+    if (!cancelOrder) {
+        console.log('Error in cancelling the order or unauthorized access');
+        return res.status(400).send('Error in cancelling the order or unauthorized access');
     }
 
+    // If the payment method is Razorpay, refund the amount to the wallet
+    if (cancelOrder.PaymentMethod === 'Razorpay') {
+        let wallet = await Wallet.findOne({ userId: userId });
+        let transaction = await Transaction.findOne({ userId: userId });
 
+        if (!wallet) {
+        var  newWallet = new Wallet({
+                userId: userId,
+                walletBalance: cancelOrder.totalPaid,
+            });
+ await newWallet.save();
+            console.log("🔥🔥🔥🔥🔥🔥👍👍👍" + 'new wallet created')
+        }else{
+          wallet.walletBalance += cancelOrder.totalPaid;
+          await wallet.save();
+        }
+
+    
+
+        if (!transaction) {
+            transaction = new Transaction({
+                userId: userId,
+                transaction: [{ mode: 'Credit', amount: cancelOrder.totalprice }],
+            });
+            console.log("🔥🔥🔥🔥🔥🔥👍👍👍" + 'new  transaction created')
+
+        } else {
+            transaction.transaction.push({ mode: 'Credit', amount: cancelOrder.totalprice });
+        }
+
+        await transaction.save();
+    }
    
 
     console.log('Order canceled successfully');
@@ -387,13 +382,8 @@ module.exports.returnOrder = async (req, res) => {
       $set: {returned: true}
     })
 
-    const trans = new Transaction({
-      userId: userId,
-      transaction: 'Credit',
-      amount: returnOrder.totalprice
-    })
 
-    await trans.save();
+  
   
     if(returnOrder){
       res.redirect("/user/users-orders");
@@ -413,14 +403,15 @@ module.exports.walletPage = async(req,res)=>{
   try {
     const id =  req.session.user._id
 
-    const userWallet = await Wallet.findOne({userId: id}).populate('userId');
+    const userWallet = await Wallet.findOne({userId: id})
 
     console.log(userWallet)
     const headCategory = await getCategory();
     const user = req.session.user
-    const transactions = await Transaction.find({userId: id}).sort({_id: -1})
+    const trans = await Transaction.findOne({userId: id}).sort({_id: -1});
+    console.log(trans)
 
-    res.render('user/wallet', {balance: userWallet, headCategory, user: user, transactions: transactions});
+    res.render('user/wallet', {balance: userWallet, headCategory, user: user, transactions: trans});
   } catch (error) {
     console.log('Try catch error in walletPage  🤷‍♂️📀🤷‍♀️');
     console.log(error.message);
@@ -612,7 +603,8 @@ module.exports.returnApproval = async(req,res)=>{
 
     console.log(returnApproved.userId + "This is the id of the ordered user 🔥🔥🔥😥😥😥😥");
     const user = returnApproved.userId;
-    const walletAvailable = await Wallet.findOne({userId: user})
+    const walletAvailable = await Wallet.findOne({userId: user});
+    const transactionDb  = await Transaction.findOne({userId: user});
 
 
     if(returnApproved){
@@ -623,16 +615,48 @@ module.exports.returnApproval = async(req,res)=>{
             walletBalance: returnApproved.totalprice + walletAvailable.walletBalance
           }
         })
+
+        const trans = {
+          mode: 'Credit',
+          amount: returnApproved.totalPaid
+        }
+        transactionDb.transaction.push(trans);
+
+       const pushTans =  await transactionDb.save();
+
+       if(pushTans){
+        console.log('transaction details pushed  👍👍👍👍👍👍🔥🔥🔥🔥🔥🔥🔥🔥');
+       }else{
+        console.log('error pushing transactioh details💕💕💕💕💕💕💕💕💕💕💕');
+       }
+
       }else{
         const OrderReturnMoney = new Wallet({
           userId: returnApproved.userId,
-          walletBalance: returnApproved.totalprice
+          walletBalance: returnApproved.totalPaid
         
         }) 
         
         const saved = await OrderReturnMoney.save();
 
         
+        const newTrans = new Transaction({
+          userId: user,
+          transaction: [{
+            mode: 'Credit',
+           amount: returnApproved.totalPaid,
+
+         }]
+        })
+
+        const SaveNewTrans = await newTrans.save();
+
+        if(SaveNewTrans){
+          console.log('New transaction has been saved  📀📀📀📀📀📀💕💕💕👍👍👍👍👍');
+        }else{
+          console.log("Error saving new TRansaction ⛔⛔⛔⛔⛔⛔⛔⛔👋🤷‍♀️🤷‍♀️🤷‍♀️🤷‍♀️🤷‍♀️🤷‍♀️🤷‍♀️");
+        }
+
 if(saved){
   console.log('money Added to the wallet 👍👍👍👍👍👍👍👍👍👍💕');
 }else{

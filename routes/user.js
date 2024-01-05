@@ -169,7 +169,7 @@ router.post("/checkout-payment", blockChecker, PaymentCheckout); //-------------
 
 router.post("/verify-payment", verifyPayment); //--------------------------------------------------===| VERIFY PAYMENT USING AJAX
 
-router.get("/coupons", coupons); //----------------------------------------------------------------===| COUPONS
+router.get("/coupons",blockChecker, coupons); //----------------------------------------------------------------===| COUPONS
 
 router.post("/use-coupon", blockChecker, useCoupon); //--------------------------------------------===| USING AND VALIDATING COUPON USING AJAX
 

@@ -99,11 +99,11 @@
 
         <h3 class="mb-3">Transaction History</h3>
         <ul id="transaction-list">
-            <% transactions.forEach(function(transaction) { %>
-                <li class="transaction <%= transaction.transaction === 'Credit' ? 'credit' : 'debit' %>">
-                    <%= transaction.transaction %>&nbsp;
-                    <%= transaction.amount %>
-                    <span class="transaction-time"><%= transaction.time.toLocaleDateString() %> <%= transaction.time.toLocaleTimeString() %></span>
+            <% transactions.transaction.forEach((trans)=> { %>
+                <li class="transaction <%= trans.transaction === 'Credit' ? 'credit' : 'debit' %>">
+                    <%= trans.mode %>&nbsp;
+                    <%= trans.amount %>
+                    <span class="transaction-time"><%= trans.time.toLocaleDateString() %> <%= trans.time.toLocaleTimeString() %></span>
                 </li>
             <% }); %>
         </ul>

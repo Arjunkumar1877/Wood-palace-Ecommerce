@@ -1,17 +1,16 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const schema = mongoose.Schema
 
 
-const walletSchema = Schema({
-      userId: {
+const walletSchema = new schema({
+    userId: {
         type: String,
-        require: true
-      },
-      walletBalance: {
-        type: Number,
-        default: 0,
-        require: true
-      }
+        required: true
+    },
+    walletBalance: {
+        type:Number,
+        default: 0
+    }
 })
 
 module.exports.Wallet = mongoose.model('Wallet', walletSchema);
