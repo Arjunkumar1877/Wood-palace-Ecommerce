@@ -96,20 +96,21 @@
     <% if (balance) { %>
         <h2 class="text-center mb-4">Your Wallet</h2>
         <div id="balance" class="text-center mb-4">Balance: ₹ <%= balance.walletBalance %>.00</div>
+        <% } else { %>
+            <h2 class="text-center mb-4">Your Wallet is Empty</h2>
+        <% } %>
 
         <h3 class="mb-3">Transaction History</h3>
         <ul id="transaction-list">
             <% transactions.transaction.forEach((trans)=> { %>
-                <li class="transaction <%= trans.transaction === 'Credit' ? 'credit' : 'debit' %>">
+                <li class="transaction <%= trans.mode === 'Credit' ? 'credit' : 'debit' %>">
                     <%= trans.mode %>&nbsp;
                     <%= trans.amount %>
                     <span class="transaction-time"><%= trans.time.toLocaleDateString() %> <%= trans.time.toLocaleTimeString() %></span>
                 </li>
             <% }); %>
         </ul>
-    <% } else { %>
-        <h2 class="text-center mb-4">Your Wallet is Empty</h2>
-    <% } %>
+    
 
     
 </div>

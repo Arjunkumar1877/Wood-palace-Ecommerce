@@ -1,3 +1,4 @@
+const { Banner } = require("../models/bannerSchema");
 const { Orders } = require("../models/orderSchema");
 const { Product } = require("../models/productSchema");
 const { User } = require("../models/userModel");
@@ -103,6 +104,7 @@ const codOrders = await Orders.aggregate([
   const users = await Orders.find().limit(5);
   const products = await Product.find().sort({dateCreated: -1}).limit(4)
 
+  const banner = await Banner.find();
 
 
     res.render('admin/dash', {
@@ -114,14 +116,15 @@ const codOrders = await Orders.aggregate([
         deliveredOrders: deliveredOrders,
         returnedOrders: returnedOrders,
         canceledOrders: canceledOrders,
-        totalOrders: totalOrders
+        totalOrders: totalOrders,
+        banner: banner
 
     });
 
     
   } catch (error) {
-    console.error("Error in salesChart:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.log(error.message);
+    console.log('Try catch error in dashboard 🤷‍♂️📀🤷‍♀️');
   }
 };
 

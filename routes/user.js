@@ -119,7 +119,7 @@ router.get("/user-profile", loginOrNot, userProfile); //------------------------
 
 router.get("/edit-profile", blockChecker, editUserProfilePage); //---------------------------------===| EDIT USER PROFILE PAGE
 
-router.get("/change-password", blockChecker, editUserPasswordPage); //---------------------------------===| EDIT USER PASSWORD PAGE
+router.get("/change-password", blockChecker, editUserPasswordPage); //-----------------------------===| EDIT USER PASSWORD PAGE
 
 router.post("/update-profile", blockChecker, editUserProfile); //----------------------------------===| UPDATE EDITED USER PROFILE
 
@@ -169,7 +169,7 @@ router.post("/checkout-payment", blockChecker, PaymentCheckout); //-------------
 
 router.post("/verify-payment", verifyPayment); //--------------------------------------------------===| VERIFY PAYMENT USING AJAX
 
-router.get("/coupons",blockChecker, coupons); //----------------------------------------------------------------===| COUPONS
+router.get("/coupons",blockChecker, coupons); //---------------------------------------------------===| COUPONS
 
 router.post("/use-coupon", blockChecker, useCoupon); //--------------------------------------------===| USING AND VALIDATING COUPON USING AJAX
 

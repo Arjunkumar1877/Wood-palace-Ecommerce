@@ -341,6 +341,7 @@ module.exports.cancelOrder = async (req, res) => {
             });
  await newWallet.save();
             console.log("🔥🔥🔥🔥🔥🔥👍👍👍" + 'new wallet created')
+
         }else{
           wallet.walletBalance += cancelOrder.totalPaid;
           await wallet.save();
@@ -423,9 +424,11 @@ module.exports.walletUsage = async (req, res) => {
   try {
     const userId = req.session.user._id;
 
-    const userWallet = await Wallet.findOne({ userId });
-    const userCart = await Cart.findOne({ userId });
-  
+    const userWallet = await Wallet.findOne({ userId: userId });
+    const userCart = await Cart.findOne({ userId: userId });
+    const TransactionDb = await Transaction.findOne({userId: userId})
+
+
 
     if (!userCart) {
       return res.status(400).send("No cart available.");
@@ -447,23 +450,29 @@ module.exports.walletUsage = async (req, res) => {
       totalSave = total
       userWallet.walletBalance = wallet;
       await userWallet.save();
-      const savedTrans = new Transaction({
-        userId: userId,
-        transaction: 'Dedit',
-        amount: totalSave
-      })
-      await savedTrans.save();
+      const pushTrans = {
+          mode: "Debit",
+          amount: totalSave
+        }
+
+        TransactionDb.transaction.push(pushTrans)
+    
+      await TransactionDb.save();
 
     } else{
-      await Wallet.deleteOne({userId: userId});
       totalSave = walletBalance
       orderTotal = total - walletBalance;
-      const savedTrans = new Transaction({
-        userId: userId,
-        transaction: 'Dedit',
+      wallet = 0;
+      userWallet.walletBalance = wallet;
+      await userWallet.save();
+      const pushTrans = {
+        mode: "Debit",
         amount: totalSave
-      })
-      await savedTrans.save();
+      }
+
+      TransactionDb.transaction.push(pushTrans)
+  
+    await TransactionDb.save();
 
     } 
 
@@ -485,7 +494,7 @@ module.exports.invoiceDownload= async (req, res) => {
     
 
   } catch (error) {
-    console.log('Try catch error in walletUsage  🤷‍♂️📀🤷‍♀️');
+    console.log('Try catch error in invoiceDownload  🤷‍♂️📀🤷‍♀️');
     console.log(error.message);
   }
 };

@@ -30,7 +30,8 @@ module.exports.salesReportsPage = async(req,res)=>{
         res.render('admin/sales-report', {headCategory, order: orders});
         
     } catch (error) {
-        console.log(error.message);
+      console.log(error.message);
+      console.log('Try catch error in salesReportPage 🤷‍♂️📀🤷‍♀️');
     }
 };
 
@@ -45,7 +46,8 @@ module.exports.genertaeSalesReportsPage = async(req,res)=>{
       res.render('admin/salesReport-download', {headCategory, order: orders});
       
   } catch (error) {
-      console.log(error.message);
+    console.log(error.message);
+    console.log('Try catch error in generateSalesReportPage 🤷‍♂️📀🤷‍♀️');
   }
 };
 
@@ -127,6 +129,6 @@ module.exports.salesReport = async (req, res) => {
 
   } catch (error) {
     console.log(error.message);
-    res.status(500).send('An error occurred. Please try again later.');
+    console.log('Try catch error in salesReport 🤷‍♂️📀🤷‍♀️');
   }
 };

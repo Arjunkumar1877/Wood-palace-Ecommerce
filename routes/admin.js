@@ -58,7 +58,7 @@ router.get("/edit-product/:id", editProduct);//---------------------------------
 
 router.get("/crop-image/:id", croppingImagePage);//---------------------------------------------------------------| GO TO CROPPING IMAGE PAGE
 
-router.post("/crop-image", cropImageAjax);//----------------------------------------------------------------------| T 
+router.post("/crop-image", cropImageAjax);//----------------------------------------------------------------------| CROPING AJAX
  
 router.post("/delete-image", deleteImage);//----------------------------------------------------------------------| GO TO EDIT PRODUCT PAGE 
 

@@ -105,7 +105,6 @@ module.exports.ProductAddToCart = async (req, res) => {
   }
 };
 
-
 // <-------------------------------------------------------| ADD PRODUCT TO THE CART-------------------------------------------|>
 module.exports.ProductBuyToCart = async (req, res) => {
 

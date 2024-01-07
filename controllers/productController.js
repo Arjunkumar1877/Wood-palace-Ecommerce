@@ -406,6 +406,7 @@ try {
   res.render('admin/cropperImage', {item: item})
 } catch (error) {
   console.log(error.message);
+  console.log('Try catch error in croppingImagePage 🤷‍♂️📀🤷‍♀️');
 }
 };
 
@@ -420,5 +421,6 @@ module.exports.cropImageAjax = async(req,res)=>{
     
   } catch (error) {
     console.log(error.message);
+    console.log('Try catch error in cropImageAjax 🤷‍♂️📀🤷‍♀️');
   }
 };

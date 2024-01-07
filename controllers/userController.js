@@ -71,16 +71,21 @@ module.exports.signupPage = async (req, res) => {
 
     res.render("user/signup", { admin: true });
   } catch (err) {
-    console.error("Error deleting unverified users:", err);
-    res.status(500).send("Internal Server Error");
+    console.log(error.message);
+    console.log('Try catch error in signupPage 🤷‍♂️📀🤷‍♀️');
   }
 };
 
 // <-------------------------------------------------------| USER LOGIN PAGE -----------------------------------------------------------------|>
 module.exports.alreadySignedIn = (req, res) => {
+try {
+   res.render("user/login", { admin: true, pass: ' '});
+} catch (error) {
+  console.log(error.message);
+  console.log('Try catch error in alreadySignedIn 🤷‍♂️📀🤷‍♀️');
+}
 
-
-  res.render("user/login", { admin: true, pass: ' '});
+ 
 };
 
 // <-------------------------------------------------------| POSTING USER NEW USER & SENDING OTP & REDIRECT TO OTP PAGE  ---------------------|>
@@ -144,7 +149,8 @@ module.exports.signUp = async (req, res) => {
 
     return  res.render("user/signupOtp", { admin: false, user: userAuth });
   } catch (error) {
-    console.error(error);
+    console.log(error.message);
+    console.log('Try catch error in signup 🤷‍♂️📀🤷‍♀️');
   }
 };
 
@@ -206,7 +212,8 @@ module.exports.resendOtp = async(req,res)=>{
 
     
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
+    console.log('Try catch error in resendOtp 🤷‍♂️📀🤷‍♀️');
   }
 };
 
@@ -301,6 +308,7 @@ module.exports.emailOtp = async(req,res)=>{
    
   } catch (error) {
     console.log(error.message);
+    console.log('Try catch error in emailOtp 🤷‍♂️📀🤷‍♀️');
   }
     
 };
@@ -396,6 +404,7 @@ module.exports.resendEmailOtp = async(req,res)=>{
    
   } catch (error) {
     console.log(error.message);
+    console.log('Try catch error in resendEmailOtp 🤷‍♂️📀🤷‍♀️');
   }
     
 };
@@ -429,6 +438,7 @@ module.exports.emailOtpVerify = async(req,res)=>{
     
   } catch (error) {
     console.log(error.message);
+    console.log('Try catch error in EmailOtpVerify 🤷‍♂️📀🤷‍♀️');
   }
 };
 
@@ -463,8 +473,8 @@ module.exports.verifyOtp = async (req, res) => {
       }
     }
   } catch (error) {
-    console.log("Error in verifying OTP:", error.message);
-    res.status(500).send("Internal Server Error");
+    console.log(error.message);
+    console.log('Try catch error in verifyOtp 🤷‍♂️📀🤷‍♀️');
   }
 };
 
@@ -502,8 +512,8 @@ module.exports.authLogin = async (req, res) => {
     return res.render("user/login", {pass: 'Email invalid'});
   }
  } catch (error) {
-  console.log('Auth-login try catch error !🤷‍♂️😥🤷‍♂️');
   console.log(error.message);
+  console.log('Try catch error in authLogin 🤷‍♂️📀🤷‍♀️');
  }
 };
 
@@ -515,6 +525,7 @@ module.exports.forgotPassword = async (req, res) => {
     res.render("user/userForgotPass", { user: user , changepass: false});
   } catch (error) {
     console.log(error.message);
+    console.log('Try catch error in forgotPassword 🤷‍♂️📀🤷‍♀️');
   }
 };
 
@@ -639,7 +650,7 @@ module.exports.addNewPassword = async (req, res) => {
   }
 };
 
-
+// <-------------------------------------------------------| POSTING & CHANGING USER PASSWORD  -----------------------------------------------|>
 module.exports.changePassword = async(req,res) =>{
   try {
     const oldPassword = req.body.oldPassword;
@@ -669,7 +680,8 @@ const update = await User.findOneAndUpdate({_id: id}, {
 
   
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
+    console.log('Try catch error in changePassword 🤷‍♂️📀🤷‍♀️');
   }
 }
 
@@ -699,10 +711,15 @@ module.exports.homePage = async (req, res) => {
 
 // <-------------------------------------------------------| USER LOGOUT ---------------------------------------------------------------------|>
 module.exports.userLogout = (req, res) => {
-
+try {
   req.session.user = null;
 
   res.redirect("/user/login");
+} catch (error) {
+  console.log(error.message);
+  console.log('Try catch error in userLogout 🤷‍♂️📀🤷‍♀️');
+}
+  
 };
 
 // <-------------------------------------------------------| RENDERING USER PROFILE ----------------------------------------------------------|>
@@ -717,6 +734,7 @@ module.exports.userProfile = async (req, res) => {
   res.render("user/userProfile", { user: user1, headCategory });
   } catch (error) {
     console.log(error.message);
+    console.log('Try catch error in userProfile 🤷‍♂️📀🤷‍♀️');
   }
 };
 
@@ -730,7 +748,8 @@ module.exports.editUserProfilePage = async(req,res)=>{
 
  res.render('user/editUserProfile', {user: user1, headCategory});
  } catch (error) {
-  console.log(error.message)
+  console.log(error.message);
+  console.log('Try catch error in editUserProfilePage 🤷‍♂️📀🤷‍♀️');
  }
 };
 
@@ -753,7 +772,8 @@ module.exports.editUserProfile = async(req,res)=>{
     res.redirect('/user/user-profile')
   
  } catch (error) {
-  console.log(error.message)
+  console.log(error.message);
+  console.log('Try catch error in editUserProfile 🤷‍♂️📀🤷‍♀️');
  }
 
 };
@@ -767,7 +787,8 @@ module.exports.editUserPasswordPage = async(req,res)=>{
 
     res.render('user/verifyPassword', {user: user, changepass: true})
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
+    console.log('Try catch error in editUserPasswordPage 🤷‍♂️📀🤷‍♀️');
   }
 }
 

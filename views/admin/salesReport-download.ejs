@@ -163,10 +163,13 @@ console.log(currentDateFormatted);
             <td>${ order.address.addressDetail}</td>
         </tr>
       `)}
+  <tr>
+  <td style="color:black; font-size: 30px">Total Sales:  ₹${data.totalSales}</td>
+  <td style="color:black; font-size: 30px"">Revenue:  ₹${data.averageOrderValue}</td>
+  </tr>
     </tbody>
   </table>
-  <p style="color:black;">Total Sales: ${data.totalSales}</p>
-  <p style="color:black;">Revenue: ${data.averageOrderValue}</p>
+ 
   </div>
   <button onclick="downloadPDF()">Download PDF</button>
   <button onclick="salesReportExcel()">Exports to Excel</button>
