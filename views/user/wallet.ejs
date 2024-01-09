@@ -102,6 +102,7 @@
 
         <h3 class="mb-3">Transaction History</h3>
         <ul id="transaction-list">
+         <% if (transactions) { %>
             <% transactions.transaction.forEach((trans)=> { %>
                 <li class="transaction <%= trans.mode === 'Credit' ? 'credit' : 'debit' %>">
                     <%= trans.mode %>&nbsp;
@@ -109,6 +110,9 @@
                     <span class="transaction-time"><%= trans.time.toLocaleDateString() %> <%= trans.time.toLocaleTimeString() %></span>
                 </li>
             <% }); %>
+         <% }else{ %>
+            <h4>No transaction till now</h4>
+            <% } %>
         </ul>
     
 

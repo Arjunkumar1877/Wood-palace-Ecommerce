@@ -60,7 +60,7 @@ module.exports.UserLoginChecker = (req, res, next) => {
 // <---------------------------| SESSION HANDLING MIDDLEWARE ADMIN----------------------------------|>
 module.exports.adminSessionCheck = (req, res, next) => {
   try {
-    if (req.session.name && req.session.admin) {
+    if (req.session.admin) {
       res.redirect("/admin/dash");
     } else {
       next();
