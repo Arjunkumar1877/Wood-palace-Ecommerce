@@ -20,18 +20,27 @@ const getCategory = async function () {
 
 
 // <-------------------------------------------------------| SALES REPORTS PAGE ----------------------------------------------------------|>
-module.exports.salesReportsPage = async(req,res)=>{
+module.exports.salesReportsPage = async (req, res) => {
     try {
         const headCategory = await getCategory();
-        const orders = await Orders.find().sort({createdAt: -1})
+        const orders = await Orders.aggregate([
+          {
+              $match: {
+                  orderStatus: 'Delivered',
+                  // returned: true
+              }
+          },
+          {
+              $sort: { createdAt: -1 }
+          }
+      ]);
+        console.log(orders);
 
-        console.log(orders)
-
-        res.render('admin/sales-report', {headCategory, order: orders});
-        
+        res.render('admin/sales-report', { headCategory, orders }); // Changed 'order' to 'orders'
     } catch (error) {
-      console.log(error.message);
-      console.log('Try catch error in salesReportPage 🤷‍♂️📀🤷‍♀️');
+        console.error(error.message);
+        console.log('Try catch error in salesReportPage 🤷‍♂️📀🤷‍♀️');
+        res.status(500).send('Internal Server Error');
     }
 };
 

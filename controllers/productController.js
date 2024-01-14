@@ -159,18 +159,18 @@ console.log("h00000000000000000000000000000iiiiiiiiiiiiiiiiiiiiiiiii")
       }else if(price < 9000){
         products = productCat.filter((value)=> value.price >= 8000 && value.price <= 9000);
       }
-      console.log("heeeeeeeeeeeeeeeeyyyyyyyyyy")
+      console.log("heeeeeeeeeeeeeeeeyyyyyyyyyy");
       res.send({ products: products });
 
 
     }else if (price === undefined && id !== undefined) {
       
       products = productCat;
-      console.log("helllllllllllllllllllllllloooooooooooooooooooo")
+      console.log("helllllllllllllllllllllllloooooooooooooooooooo");
       res.send({ products: products });
     }else{
       products = product
-      console.log("All productsssssssssss")
+      console.log("All productsssssssssss");
       res.send({ products: products });
     }
     
