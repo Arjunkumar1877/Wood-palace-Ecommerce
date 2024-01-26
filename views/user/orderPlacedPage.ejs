@@ -201,11 +201,13 @@ console.log(orderId)
       console.log(order.address)
       console.log(order.items)
 
-const products = order.items.map(item => ({
-"quantity": item.quantity,
-"description": item.name,
-"price": item.price
+      const products = order.items.map(item => ({
+  "quantity": item.quantity,
+  "description": item.name,
+  "price": item.price,
+  "total": item.quantity * item.price // Add this line to calculate the total for each item
 }));
+
 
 const data = {
 "customize": {

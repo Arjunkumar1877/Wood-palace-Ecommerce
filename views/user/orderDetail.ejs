@@ -205,6 +205,7 @@ $(document).ready(function () {
 
         const products = order.items.map(item => ({
           "quantity": parseInt(item.quantity),
+          "tax-rate": 2,
           "description": item.name,
           "price": parseInt(item.price)
         }));
